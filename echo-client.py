@@ -1,7 +1,15 @@
 import socket
 import os
+import subprocess
+import sys
+import pandas as pd
 
-HOST = "192.168.0.100"  # The server's hostname or IP address
+result = pd.read_csv(sys.argv[1])
+print(result["id"][0])
+print(len(result))
+
+HOST = result["ip_address"][0]  # Standard loopback interface address (localhost)
+print(HOST)
 PORT = 65432  # The port used by the server
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -11,6 +19,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     result = data.decode('utf-8')
 
 
-print(f"Received {result}")
-print(f"Command {result} ")
-os.system(result)
+print("Received")
+
+list = result.split('\n')
+
+print(list)
+
