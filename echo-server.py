@@ -19,7 +19,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 break
             print(f"Command {data} ")
             result = data.decode('utf-8')
-            fd_popen = subprocess.Popen(result, stdout=subprocess.PIPE).stdout
+            print(result)
+            res = result.split(' ')
+            fd_popen = subprocess.Popen(res, stdout=subprocess.PIPE).stdout
+
             data = fd_popen.read().strip()
+            print(data)
             fd_popen.close()
             conn.sendall(data)
