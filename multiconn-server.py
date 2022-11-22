@@ -44,11 +44,12 @@ def service_connection(key, mask):
             data.outb = data.outb[sent:]
 
 
-if len(sys.argv) != 3:
-    print(f"Usage: {sys.argv[0]} <host> <port>")
+if len(sys.argv) != 2:
+    print(f"Usage: {sys.argv[0]} <host>")
     sys.exit(1)
-
-host, port = sys.argv[1], int(sys.argv[2])
+    
+port = 65432
+host, port = sys.argv[1], port
 lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 lsock.bind((host, port))
 lsock.listen()

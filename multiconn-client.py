@@ -14,52 +14,43 @@ sel = selectors.DefaultSelector()
 # messages = [b"Message 1 from client.", b"Message 2 from client."]
 
 f = open(sys.argv[2], 'r')
-messages = []
 lines = f.readlines()
+messages = {"id": [] , "command": []}
+server_list = []
 for line in lines:
-    messages.append((line.split('\n')[0]).encode('utf-8'))
+    messages["id"].append(line.split('\n')[0].split(" ")[0])
+    messages["command"].append(line.split('\n')[0].split(" ")[1])
     f.close()
 
 def start_connections(host, port, ip_num):
     # server_addr = (host, port)
     for i in range(0, ip_num):
-        # server_addr = (host[i],port)
-        server_addr = ('127.0.0.1',6543)
+        server_addr = (host[i],port)
         connid = i + 1
         print(f"Starting connection {connid} to {server_addr}")
-        start_time = time.time()
-        
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print(sock)
         sock.setblocking(True)
-        # sock.connect_ex(server_addr)
         re_val = sock.settimeout(5)
-        # print(re_val)
         try:
             sock.connect(server_addr)
         except:
             print("exception occurred")
-        # print(re_val)
-        # sock.settimeout(None)
-        print(sock)
-        # print(f"sock int : {a}")
-        # if a == 0:
-        #     # send_message(s, command_list)
-        #     break
-        # else:
-        #     if(time.time() - start_time > 5):
-        #         sock.close()
-        #         break
-        #     else:
-        #         time.sleep(0.1)
-        #         sock.close()
-        #         continue
+            continue
+        # finally:
         events = selectors.EVENT_READ | selectors.EVENT_WRITE
         print(messages)
         to_list = []
-        to_list.append(messages[i])
-        print(list(messages[i]))
+        print(len(messages["id"]))
+        
+        for j in range(len(messages["id"])):
+            print(messages["id"][j] )
+            print(connid)
+            if messages["id"][j] == str(connid):
+                to_list.append(messages["command"][j].encode('utf-8'))        
+        # to_list.append(messages["command"][i].encode('utf-8'))
         print(to_list)
+        print("for what?")
         data = types.SimpleNamespace(
             connid=connid,
             msg_total=len(to_list[0]),
@@ -91,9 +82,10 @@ def service_connection(key, mask):
             data.outb = data.outb[sent:]
 
 
-# if len(sys.argv) != 4:
-#     print(f"Usage: {sys.argv[0]} <host> <port> <num_connections>")
-#     sys.exit(1)
+if len(sys.argv) != 3:
+    print(f"Usage: {sys.argv[0]} <host file> <command file>")
+    sys.exit(1)
+
 
 
 ip_data = pd.read_csv(sys.argv[1])
