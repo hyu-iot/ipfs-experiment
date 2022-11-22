@@ -11,8 +11,8 @@ import time
 
 
 sel = selectors.DefaultSelector()
-# messages = [b"Message 1 from client.", b"Message 2 from client."]
 
+# Load the command.txt file
 f = open(sys.argv[2], 'r')
 lines = f.readlines()
 messages = {"id": [] , "command": []}
@@ -25,17 +25,6 @@ for line in lines:
 f.close()
 
 
-f = open("command.txt", 'r')
-a = []
-dic = {"id": [] , "command": []}
-lines = f.readlines()
-for line in lines:
-    line_v = line.strip()
-    if line_v[0] == '#':
-        continue
-    dic["id"].append(line.split('\n')[0].split(" ")[0])
-    dic["command"].append(line.split('\n')[0].split(" ")[1])
-f.close()
 socket_list = []
 def start_connections(host, port, ip_num):
     for i in range(0, ip_num):
@@ -48,7 +37,7 @@ def start_connections(host, port, ip_num):
         try:
             sock.connect(server_addr)
         except:
-            print("exception occurred")
+            print("Warning!!")
             continue
         socket_info = connid , server_addr
         socket_list.append(socket_info)
