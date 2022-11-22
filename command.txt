@@ -1,3 +1,6 @@
+# command 'ls' to send to 1st server
 1 ls
+# command 'pwd' to send to 3rd server
 3 pwd
+# command 'ls -l' to send to 2nd server
 2 ls -l

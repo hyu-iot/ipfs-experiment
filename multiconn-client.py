@@ -16,20 +16,33 @@ sel = selectors.DefaultSelector()
 f = open(sys.argv[2], 'r')
 lines = f.readlines()
 messages = {"id": [] , "command": []}
-server_list = []
 for line in lines:
-    messages["id"].append(line.split('\n')[0].split(" ")[0])
-    messages["command"].append(line.split('\n')[0].split(" ")[1])
-    f.close()
+    line_v = line.strip()
+    if line_v[0] == '#':
+        continue
+    messages["id"].append(line_v.split('\n')[0].split(" ")[0])
+    messages["command"].append(line_v.split('\n')[0].split(" ")[1])
+f.close()
 
+
+f = open("command.txt", 'r')
+a = []
+dic = {"id": [] , "command": []}
+lines = f.readlines()
+for line in lines:
+    line_v = line.strip()
+    if line_v[0] == '#':
+        continue
+    dic["id"].append(line.split('\n')[0].split(" ")[0])
+    dic["command"].append(line.split('\n')[0].split(" ")[1])
+f.close()
+socket_list = []
 def start_connections(host, port, ip_num):
-    # server_addr = (host, port)
     for i in range(0, ip_num):
         server_addr = (host[i],port)
         connid = i + 1
         print(f"Starting connection {connid} to {server_addr}")
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print(sock)
         sock.setblocking(True)
         re_val = sock.settimeout(5)
         try:
@@ -37,20 +50,15 @@ def start_connections(host, port, ip_num):
         except:
             print("exception occurred")
             continue
-        # finally:
+        socket_info = connid , server_addr
+        socket_list.append(socket_info)
+        print(f"socket list : {socket_list}")
         events = selectors.EVENT_READ | selectors.EVENT_WRITE
-        print(messages)
+        print(f"message : {messages}")
         to_list = []
-        print(len(messages["id"]))
-        
         for j in range(len(messages["id"])):
-            print(messages["id"][j] )
-            print(connid)
             if messages["id"][j] == str(connid):
                 to_list.append(messages["command"][j].encode('utf-8'))        
-        # to_list.append(messages["command"][i].encode('utf-8'))
-        print(to_list)
-        print("for what?")
         data = types.SimpleNamespace(
             connid=connid,
             msg_total=len(to_list[0]),
@@ -59,7 +67,6 @@ def start_connections(host, port, ip_num):
             outb=b"",
         )
         sel.register(sock, events, data=data)
-
 
 def service_connection(key, mask):
     sock = key.fileobj

@@ -1,12 +1,16 @@
-import socket
-import os
-import subprocess
-import sys
 
-f = open(sys.argv[1], 'r')
-command_list = []
+
+
+f = open("command.txt", 'r')
+a = []
+dic = {"id": [] , "command": []}
 lines = f.readlines()
 for line in lines:
-    command_list.append((line.split('\n')[0]).encode('utf-8'))
+    line_v = line.strip()
+    if line_v[0] == '#':
+        continue
+    dic["id"].append(line_v.split('\n')[0].split(" ")[0])
+    dic["command"].append(line_v.split('\n')[0].split(" ")[1])
 f.close()
-print(command_list)
+print(dic)
+print(type(dic))
