@@ -8,5 +8,5 @@ It shows communication between echo-client and echo-server.
   - Two computers or two server
   - client and server code use the server's ip address
 - Implement
-  - python3 echo-server.py
-  - python3 echo-client.py info.csv
+  - python3 multiconn-server.py 127.0.0.1
+  - python3 multiconn-client.py info.csv command.txt
