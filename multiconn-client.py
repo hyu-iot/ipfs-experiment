@@ -48,9 +48,13 @@ def start_connections(host, port, ip_num):
         for j in range(len(messages["id"])):
             if messages["id"][j] == str(connid):
                 to_list.append(messages["command"][j].encode('utf-8'))        
+        print(to_list)
+        length = 0
+        for to in to_list:
+            length += len(to)
         data = types.SimpleNamespace(
             connid=connid,
-            msg_total=len(to_list[0]),
+            msg_total=length,
             recv_total=0,
             messages=list(to_list),
             outb=b"",
@@ -64,17 +68,20 @@ def service_connection(key, mask):
         recv_data = sock.recv(1024)  # Should be ready to read
         if recv_data:
             print(f"Received {recv_data!r} from connection {data.connid}")
+            time.sleep(0.1)
+            print()
             data.recv_total += len(recv_data)
         if not recv_data or data.recv_total == data.msg_total:
             print(f"Closing connection {data.connid}")
             sel.unregister(sock)
-            sock.close()
+            # sock.close()
     if mask & selectors.EVENT_WRITE:
         if not data.outb and data.messages:
             data.outb = data.messages.pop(0)
         if data.outb:
             print(f"Sending {data.outb!r} to connection {data.connid}")
             sent = sock.send(data.outb)  # Should be ready to write
+            time.sleep(0.1)
             data.outb = data.outb[sent:]
 
 

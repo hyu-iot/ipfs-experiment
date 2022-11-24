@@ -4,3 +4,4 @@
 3 pwd
 # command 'ls -l' to send to 2nd server
 2 ls -l
+1 pwd

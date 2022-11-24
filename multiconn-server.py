@@ -5,7 +5,7 @@ import socket
 import selectors
 import types
 import subprocess
-
+import time
 
 sel = selectors.DefaultSelector()
 
@@ -24,6 +24,7 @@ def service_connection(key, mask):
     data = key.data
     if mask & selectors.EVENT_READ:
         recv_data = sock.recv(1024)  # Should be ready to read
+        print(recv_data)
         if recv_data:
             print(f"Command {recv_data} ")
             result = recv_data.decode('utf-8')
@@ -36,20 +37,21 @@ def service_connection(key, mask):
         else:
             print(f"Closing connection to {data.addr}")
             sel.unregister(sock)
-            sock.close()
+            # sock.close()
     if mask & selectors.EVENT_WRITE:
         if data.outb:
             print(f"Echoing {data.outb!r} to {data.addr}")
             sent = sock.send(data.outb)  # Should be ready to write
+            time.sleep(1)
             data.outb = data.outb[sent:]
 
 
-if len(sys.argv) != 2:
-    print(f"Usage: {sys.argv[0]} <host>")
-    sys.exit(1)
-    
+# if len(sys.argv) != 2:
+#     print(f"Usage: {sys.argv[0]} <host>")
+#     sys.exit(1)
+
 port = 65432
-host, port = sys.argv[1], port
+host, port = 'localhost', port
 lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 lsock.bind((host, port))
 lsock.listen()
