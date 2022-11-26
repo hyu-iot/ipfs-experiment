@@ -89,8 +89,6 @@ if len(sys.argv) != 3:
     print(f"Usage: {sys.argv[0]} <host file> <command file>")
     sys.exit(1)
 
-
-
 ip_data = pd.read_csv(sys.argv[1])
 print(ip_data["id"][0])
 port = 65432

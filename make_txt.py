@@ -14,10 +14,11 @@ dic = {"id": [] , "command": []}
 lines = f.readlines()
 for line in lines:
     line_v = line.strip()
+    print(line_v)
     if line_v[0] == '#':
         continue
-    dic["id"].append(line.split('\n')[0].split(" ")[0])
-    dic["command"].append(line.split('\n')[0].split(" ")[1])
+    dic["id"].append(line.split('\n')[0].split(" ",maxsplit=1)[0])
+    dic["command"].append(line.split('\n')[0].split(" ",maxsplit=1)[1])
 f.close()
 print(dic)
 print(type(dic))
