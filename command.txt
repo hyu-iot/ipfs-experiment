@@ -1,3 +1,6 @@
 1 ls
 3 pwd
 2 ls -l
+3 ls
+1 pwd
+2 pwd
