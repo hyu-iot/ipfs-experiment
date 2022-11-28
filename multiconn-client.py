@@ -8,7 +8,7 @@ import pandas as pd
 import os
 import subprocess
 import time
-
+from datetime import datetime
 
 sel = selectors.DefaultSelector()
 
@@ -25,7 +25,7 @@ for line in lines:
 f.close()
 print(messages)
 
-
+sss_list =[]
 def connection(ip_data, port):
     socket_list = []
     for i in range(len(ip_data)):
@@ -51,7 +51,6 @@ def put_message(messages, id, sock_list):
     to_list = []
     # to_list.append(messages["command"][i].encode('utf-8'))        
     to_list.append(messages.encode('utf-8'))        
-    print(to_list)
     length = 0
     soc_num = 100
     for j in range(len(sock_list)):
@@ -80,6 +79,10 @@ def service_connection(key, mask):
         recv_data = sock.recv(1024)  # Should be ready to read
         if recv_data:
             print(f"Received {recv_data!r} from connection {data.connid}")
+            save_result = str(datetime.now()) + " R node " + str(data.connid) + " result "  + str(recv_data)
+            save_result += "\n"
+            print(save_result)
+            sss_list.append(save_result)
             time.sleep(0.1)
             data.recv_total += len(recv_data)
             sel.unregister(sock)
@@ -91,7 +94,11 @@ def service_connection(key, mask):
             data.outb = data.messages.pop(0)
         if data.outb:
             print(f"Sending {data.outb!r} to connection {data.connid}")
-            sent = sock.send(data.outb)  # Should be ready to write
+            sent = sock.send(data.outb)
+            save_send_message = str(datetime.now()) + " T node " + str(data.connid) + " message "  + str(data.outb)
+            save_send_message += "\n"
+            print(save_send_message)
+            sss_list.append(save_send_message)  # Should be ready to write
             time.sleep(0.1)
             data.outb = data.outb[sent:]
 
@@ -106,20 +113,25 @@ ip_data = pd.read_csv(sys.argv[1])
 port = 65432
 sock_list = connection(ip_data,port)
 # put_message(messages=messages, sock_list=sock_list)
-
+f = open("abcd.txt", 'w')
 try:
-        # events = sel.select(timeout=1)
-        for i in range(len(messages["id"])):
-            put_message(messages=messages["command"][i], id= messages["id"][i], sock_list=sock_list)
-            while True:
-                events = sel.select(timeout=1)
-                if events:
-                    for key, mask in events:
-                        service_connection(key, mask)
-            # Check for a socket being monitored to continue.
-                if not sel.get_map():
-                    break
+    # events = sel.select(timeout=1)
+    for i in range(len(messages["id"])):
+        put_message(messages=messages["command"][i], id= messages["id"][i], sock_list=sock_list)
+        while True:
+            events = sel.select(timeout=1)
+            if events:
+                for key, mask in events:
+                    service_connection(key, mask)
+        # Check for a socket being monitored to continue.
+            if not sel.get_map():
+                break
+    print(f"여기!!!{sss_list}")
+    for i in range(len(sss_list)):
+        f.write(sss_list[i])
+    f.close()
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
 finally:
     sel.close()
+

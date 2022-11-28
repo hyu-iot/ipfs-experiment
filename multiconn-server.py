@@ -6,6 +6,7 @@ import selectors
 import types
 import subprocess
 import time
+from datetime import datetime
 
 sel = selectors.DefaultSelector()
 
@@ -23,17 +24,23 @@ def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
     if mask & selectors.EVENT_READ:
+        start_time = datetime.now()
         recv_data = sock.recv(1024)  # Should be ready to read
         print(recv_data)
         if recv_data:
-            print(f"Command {recv_data} ")
+            print(f"Received command {recv_data} ")
             result = recv_data.decode('utf-8')
-            print(result)
             res = result.split(' ')
             fd_popen = subprocess.Popen(res, stdout=subprocess.PIPE).stdout
             comm_result = fd_popen.read().strip()
             print(comm_result)
+            print(type(comm_result))
             data.outb += comm_result
+            recv_time = datetime.now()
+            print(type(recv_time))
+            data.outb += bytes(" runtime ", 'utf-8')
+            data.outb += bytes(str(recv_time - start_time), 'utf-8')
+            print(f"timestamp: {recv_time - start_time}")
         else:
             print(f"Closing connection to {data.addr}")
             sel.unregister(sock)
