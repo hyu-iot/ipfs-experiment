@@ -79,7 +79,8 @@ def service_connection(key, mask):
         recv_data = sock.recv(1024)  # Should be ready to read
         if recv_data:
             print(f"Received {recv_data!r} from connection {data.connid}")
-            save_result = str(datetime.now()) + " R node " + str(data.connid) + " result "  + str(recv_data)
+            dt = datetime.now()
+            save_result = str(datetime.timestamp(dt)) + " R node " + str(data.connid) + " result "  + str(recv_data)
             save_result += "\n"
             print(save_result)
             sss_list.append(save_result)
@@ -95,7 +96,8 @@ def service_connection(key, mask):
         if data.outb:
             print(f"Sending {data.outb!r} to connection {data.connid}")
             sent = sock.send(data.outb)
-            save_send_message = str(datetime.now()) + " T node " + str(data.connid) + " message "  + str(data.outb)
+            dt = datetime.now()
+            save_send_message = str(datetime.timestamp(dt)) + " T node " + str(data.connid) + " command "  + str(data.outb)
             save_send_message += "\n"
             print(save_send_message)
             sss_list.append(save_send_message)  # Should be ready to write
@@ -113,7 +115,7 @@ ip_data = pd.read_csv(sys.argv[1])
 port = 65432
 sock_list = connection(ip_data,port)
 # put_message(messages=messages, sock_list=sock_list)
-f = open("abcd.txt", 'w')
+f = open("log_result.txt", 'w')
 try:
     # events = sel.select(timeout=1)
     for i in range(len(messages["id"])):
