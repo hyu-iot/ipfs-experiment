@@ -11,14 +11,8 @@ from datetime import datetime
 
 
 sel = selectors.DefaultSelector()
-# messages = [b"Message 1 from client.", b"Message 2 from client."]
 
-# f = open(sys.argv[2], 'r')
-messages = ["Comm_client"]
-# lines = f.readlines()
-# for line in lines:
-#     messages.append((line.split('\n')[0]).encode('utf-8'))
-#     f.close()
+messages = ["Hello yeongbin"]
 
 def start_connections(host, port, ip_num):
         server_addr = (host,port)
@@ -57,18 +51,21 @@ def service_connection(key, mask):
             # print(recv_data[:7])
             print(f"Received command {recv_data} ")
             result = recv_data.decode('utf-8')
-            if result[:5] == "Thank":
-                data.outb += "client_info".encode('utf-8')
-            elif result[:11] == "client_info":
-                for info in result.split(" ")[1:-1]:
-                    print(info)
-                    data.outb += "Command ".encode('utf-8') + info.encode('utf-8') + " ls".encode('utf-8')
-                    sent = sock.send(data.outb)  # Should be ready to write
-                    time.sleep(1)
-                    data.outb = data.outb[sent:]
-                # print("Good!")
-            # print(f"Received command {result} ")
-
+            if result[:7] == "Command":
+                # result = recv_data.decode('utf-8')
+                res = result.split(' ')[2]
+                fd_popen = subprocess.Popen(res, stdout=subprocess.PIPE).stdout
+                comm_result = fd_popen.read().strip()
+                data.outb += "result ".encode('utf-8')
+                data.outb += comm_result
+                recv_time = datetime.now()
+                data.outb += bytes(" runtime ", 'utf-8')
+                data.outb += bytes(str(recv_time - start_time) + str("\n"), 'utf-8')
+                print(f"timestamp: {recv_time - start_time}")
+            elif result[:5] == "Hello":
+                # data.outb += "Hello".encode('utf-8')
+                print("Good!")
+                
         if not recv_data or data.recv_total == data.msg_total:
             print(f"Closing connection {data.connid}")
             sel.unregister(sock)
@@ -93,7 +90,6 @@ print(ip_data["id"][0])
 port = 65432
 
 start_connections(ip_data["ip_address"][0] , port, len(ip_data))
-
 try:
     while True:
         events = sel.select(timeout=1)

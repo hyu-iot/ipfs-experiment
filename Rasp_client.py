@@ -12,7 +12,7 @@ from datetime import datetime
 
 sel = selectors.DefaultSelector()
 
-messages = ["Hello"]
+messages = ["Hello yunsang"]
 
 def start_connections(host, port, ip_num):
         server_addr = (host,port)
@@ -53,15 +53,16 @@ def service_connection(key, mask):
             result = recv_data.decode('utf-8')
             if result[:7] == "Command":
                 # result = recv_data.decode('utf-8')
-                res = result.split(' ')
+                res = result.split(' ')[2]
                 fd_popen = subprocess.Popen(res, stdout=subprocess.PIPE).stdout
                 comm_result = fd_popen.read().strip()
+                data.outb += "result ".encode('utf-8')
                 data.outb += comm_result
                 recv_time = datetime.now()
                 data.outb += bytes(" runtime ", 'utf-8')
-                data.outb += bytes(str(recv_time - start_time), 'utf-8')
+                data.outb += bytes(str(recv_time - start_time)+str("\n"), 'utf-8')
                 print(f"timestamp: {recv_time - start_time}")
-            elif result[:8] == "yeongbin":
+            elif result[:5] == "Hello":
                 # data.outb += "Hello".encode('utf-8')
                 print("Good!")
                 
