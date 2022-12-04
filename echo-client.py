@@ -6,24 +6,6 @@ import pandas as pd
 import time
 from threading import Timer
 
-# def connection_timeout(timeout,com_list):
-#     start_time = time.time()
-#     while True:    
-#         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-#             a = s.connect_ex((ip_data["ip_address"][i], PORT))
-#             # print(a)
-#             if a == 0:
-#                 message(s, com_list)
-#                 break
-#             else:
-#                 if(time.time() - start_time > timeout):
-#                     s.close()
-#                     break
-#                 else:
-#                     time.sleep(0.1)
-#                     s.close()
-#                     continue
-#     return a
 
 def send_message (s, command_list):
     for command in command_list:    
