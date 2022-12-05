@@ -63,6 +63,7 @@ def service_connection(key, mask):
                 for info in result.split(" ")[1:-1]:
                     print(info)
                     data.outb += "Command ".encode('utf-8') + info.encode('utf-8') + " ls".encode('utf-8')
+                    print("Command ".encode('utf-8') + info.encode('utf-8') + " ls".encode('utf-8'))
                     sent = sock.send(data.outb)  # Should be ready to write
                     time.sleep(1)
                     data.outb = data.outb[sent:]

@@ -40,21 +40,31 @@ def service_connection(key, mask):
         if recv_data:
             result = recv_data.decode('utf-8')
             if result[:len("Hello")] == "Hello":
+                name = result.split(" ")[1]
                 data.outb += "Hello, ".encode('utf-8')
-                data.outb += result.split(" ")[1].encode('utf-8')
-                client_list["sock"].append(sock)
-                client_list["id"].append(result.split(" ")[1])
-                client_list["data"].append(data)
-                print(f"Received {recv_data} from client yeongbin")
+                data.outb += name.encode('utf-8')
+                reply_block = 0
+                for j in client_list["id"]:
+                    if j == name:
+                        print(f"Received {recv_data} from client {name}")
+                        reply_block = 1
+                        break
+                if reply_block == 1:
+                    pass
+                else:                
+                    client_list["sock"].append(sock)
+                    client_list["id"].append(name)
+                    client_list["data"].append(data)
+                # print(f"Received {recv_data} from client {name}")
                 print(client_list)
             elif result[:7] == "Command":
                 print(result.split(" ")[1])
                 for i,j in enumerate(client_list["id"]):
                     if result.split(" ")[1] == j:
+                        print("여기")
+                        print(result.encode('utf-8'))
                         sock = client_list["sock"][i] 
                         data = client_list["data"][i] 
-                        # sock = sock_ 
-                        # data = data_
                         data.outb += result.encode('utf-8')
                         sent = sock.send(data.outb)  # Should be ready to write
                         data.outb = data.outb[sent:]
@@ -68,10 +78,15 @@ def service_connection(key, mask):
                 time.sleep(3)
             elif result[:11] == "Comm_client":
                 data.outb += "Thank you for your connection".encode('utf-8')
-                command_client["sock"].append(sock)
-                command_client["id"].append("yeongbin")
-                command_client["data"].append(data)
-                print(f"Received {recv_data} from client yeongbin")
+                if not command_client["sock"]:    
+                    command_client["sock"].append(sock)
+                    command_client["id"].append("yeongbin")
+                    command_client["data"].append(data)
+                if command_client["sock"]:    
+                    command_client["sock"][0] = sock
+                    command_client["id"][0] = "computer"
+                    command_client["data"][0] = data
+                print(f"Received {recv_data} from client computer")
                 print(command_client)
             elif result[:11] == "client_info":
                 data.outb += "client_info ".encode('utf-8')
@@ -80,6 +95,12 @@ def service_connection(key, mask):
                     data.outb += " ".encode('utf-8')
         else:
             print(f"Closing connection to {data.addr}")
+            for i,j in enumerate(client_list["sock"]):
+                if j == sock:
+                    del client_list["data"][i]
+                    del client_list["id"][i]
+                    del client_list["sock"][i]
+            print(client_list["id"])
             sel.unregister(sock)
             # sock.close()
     if mask & selectors.EVENT_WRITE:
