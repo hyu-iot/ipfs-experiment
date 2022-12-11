@@ -80,9 +80,9 @@ def service_connection(key, mask):
                 data.outb += "Thank you for your connection".encode('utf-8')
                 if not command_client["sock"]:    
                     command_client["sock"].append(sock)
-                    command_client["id"].append("yeongbin")
+                    command_client["id"].append("computer")
                     command_client["data"].append(data)
-                if command_client["sock"]:    
+                else:    
                     command_client["sock"][0] = sock
                     command_client["id"][0] = "computer"
                     command_client["data"][0] = data
@@ -93,13 +93,14 @@ def service_connection(key, mask):
                 for i in range(len(client_list["id"])):
                     data.outb += client_list["id"][i].encode('utf-8')
                     data.outb += " ".encode('utf-8')
+            else:
+                print(f"Closing connection to {data.addr} !!")
+                sel.unregister(sock)
         else:
             print(f"Closing connection to {data.addr}")
             for i,j in enumerate(client_list["sock"]):
                 if j == sock:
-                    del client_list["data"][i]
-                    del client_list["id"][i]
-                    del client_list["sock"][i]
+                    del client_list["data"][i], client_list["id"][i], client_list["sock"][i]
             print(client_list["id"])
             sel.unregister(sock)
             # sock.close()

@@ -13,7 +13,7 @@ from datetime import datetime
 sel = selectors.DefaultSelector()
 
 messages = ["Hello yunsang"]
-
+sock_list = []
 def start_connections(host, port, ip_num):
         server_addr = (host,port)
         connid = ip_num
@@ -21,6 +21,7 @@ def start_connections(host, port, ip_num):
         
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print(sock)
+        sock_list.append(sock)
         sock.setblocking(True)
         try:
             sock.connect(server_addr)
@@ -39,7 +40,7 @@ def start_connections(host, port, ip_num):
         )
         sel.register(sock, events, data=data)
 
-
+num = 0
 def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
@@ -69,16 +70,23 @@ def service_connection(key, mask):
         if not recv_data or data.recv_total == data.msg_total:
             print(f"Closing connection {data.connid}")
             sel.unregister(sock)
+            print(sel)
             # sock.close()
     if mask & selectors.EVENT_WRITE:
         if not data.outb and data.messages:
             data.outb = data.messages.pop(0)
         if data.outb:
+            global num
+            num += 1
             print(f"Sending {data.outb!r} to connection {data.connid}")
             sent = sock.send(data.outb)  # Should be ready to write
             time.sleep(1)
             data.outb = data.outb[sent:]
-
+            if num == 2:
+                sel.unregister(sock)
+                del sock_list[0]
+                sock.close()
+                
 
 # if len(sys.argv) != 3:
 #     print(f"Usage: {sys.argv[0]} <host info> <command file>")
@@ -96,10 +104,13 @@ try:
         if events:
             for key, mask in events:
                 service_connection(key, mask)
+        if len(sock_list) == 0:
+            start_connections(ip_data["ip_address"][0] , port, len(ip_data))
         # Check for a socket being monitored to continue.
         if not sel.get_map():
             break
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
+    
 finally:
     sel.close()
