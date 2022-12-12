@@ -87,7 +87,7 @@ def service_connection(key, mask):
 
 ip_data = pd.read_csv(sys.argv[1])
 print(ip_data["id"][0])
-port = 65432
+port = 7001
 
 start_connections(ip_data["ip_address"][0] , port, len(ip_data))
 try:

@@ -29,7 +29,7 @@ print(len(ip_data))
 
 # HOST = ip_data["ip_address"][0]  # Standard loopback interface address (localhost)
 # print(HOST)
-PORT = 65432  # The port used by the server
+PORT = 7001  # The port used by the server
 
 f = open(sys.argv[2], 'r')
 command_list = []

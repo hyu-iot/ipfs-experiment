@@ -114,7 +114,7 @@ def service_connection(key, mask):
 # if len(sys.argv) != 3:
 #     print(f"Usage: {sys.argv[0]} <host> <port>")
 #     sys.exit(1)
-port = 65432
+port = 7001
 host, port = 'localhost', port
 lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 lsock.bind((host, port))
