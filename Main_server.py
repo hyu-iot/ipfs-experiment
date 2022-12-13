@@ -38,15 +38,18 @@ def service_connection(key, mask):
     if mask & selectors.EVENT_READ:
         recv_data = sock.recv(1024)  # Should be ready to read
         if recv_data:
-            result = recv_data.decode('utf-8')
-            if result[:len("Hello")] == "Hello":
-                name = result.split(" ")[1]
+            recv_data_str = recv_data.decode('utf-8')
+            if recv_data_str[:len("Hello")] == "Hello":
+                name = recv_data_str.split(" ")[1]
                 data.outb += "Hello, ".encode('utf-8')
                 data.outb += name.encode('utf-8')
                 reply_block = 0
-                for j in client_list["id"]:
-                    if j == name:
+                for j,k in enumerate(client_list["id"]):
+                    if k == name:
                         print(f"Received {recv_data} from client {name}")
+                        del client_list["data"][j], client_list["sock"][j]
+                        client_list["data"][j].append(data)
+                        client_list["sock"][j].append(sock)
                         reply_block = 1
                         break
                 if reply_block == 1:
@@ -57,26 +60,26 @@ def service_connection(key, mask):
                     client_list["data"].append(data)
                 # print(f"Received {recv_data} from client {name}")
                 print(client_list)
-            elif result[:7] == "Command":
-                print(result.split(" ")[1])
+            elif recv_data_str[:7] == "Command":
+                print(recv_data_str.split(" ")[1])
                 for i,j in enumerate(client_list["id"]):
-                    if result.split(" ")[1] == j:
+                    if recv_data_str.split(" ")[1] == j:
                         print("여기")
-                        print(result.encode('utf-8'))
+                        print(recv_data_str.encode('utf-8'))
                         sock = client_list["sock"][i] 
                         data = client_list["data"][i] 
-                        data.outb += result.encode('utf-8')
+                        data.outb += recv_data_str.encode('utf-8')
                         sent = sock.send(data.outb)  # Should be ready to write
                         data.outb = data.outb[sent:]
-            elif result[:6] == "result":
+            elif recv_data_str[:6] == "result":
                 sock = command_client["sock"][0] 
                 data = command_client["data"][0]
-                data.outb = result.encode('utf-8')
+                data.outb = recv_data_str.encode('utf-8')
                 print(f"Echoing {data.outb!r} to {data.addr}")
                 sent = sock.send(data.outb)  # Should be ready to write
                 data.outb = data.outb[sent:]
                 time.sleep(3)
-            elif result[:11] == "Comm_client":
+            elif recv_data_str[:11] == "Comm_client":
                 data.outb += "Thank you for your connection".encode('utf-8')
                 if not command_client["sock"]:    
                     command_client["sock"].append(sock)
@@ -88,7 +91,7 @@ def service_connection(key, mask):
                     command_client["data"][0] = data
                 print(f"Received {recv_data} from client computer")
                 print(command_client)
-            elif result[:11] == "client_info":
+            elif recv_data_str[:11] == "client_info":
                 data.outb += "client_info ".encode('utf-8')
                 for i in range(len(client_list["id"])):
                     data.outb += client_list["id"][i].encode('utf-8')
