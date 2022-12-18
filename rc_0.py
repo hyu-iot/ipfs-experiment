@@ -13,7 +13,7 @@ import psutil
 sel = selectors.DefaultSelector()
 
 messages = ["Hello yunsang"]
-execute_file = "loop_experiment.py" 
+execute_file = "loop.py" 
 
 def _check_usage_of_cpu_and_memory():
     
@@ -36,7 +36,7 @@ def get_size(bytes):
             return f"{bytes:.2f}{unit}B"
         bytes /= 1024
 
-        
+
 def start_connections(host, port, ip_num):
         server_addr = (host,port)
         connid = ip_num

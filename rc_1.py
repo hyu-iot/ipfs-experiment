@@ -14,7 +14,7 @@ import psutil
 sel = selectors.DefaultSelector()
 
 messages = ["Hello yeongbin"]
-execute_file = "loop_experiment.py" 
+execute_file = "loop.py" 
 
 def _check_usage_of_cpu_and_memory():
     

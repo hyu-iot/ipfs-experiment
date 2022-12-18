@@ -9,16 +9,11 @@ import time
 from datetime import datetime
 import psutil
 
-command = sys.argv[1:]
-fd_popen = subprocess.Popen(command, stdout=subprocess.PIPE)
-try:
-    outs, err = fd_popen.communicate(timeout=15)
-except TimeoutError:
-    fd_popen.kill()
-finally:
-    pass
-
-if outs:
-    print(outs)
-else:
-    print(err)
+execute_file = "loop.py" 
+command = "ls"
+command_0 = "-l"
+fd_popen = subprocess.Popen(['python3', execute_file, command, command_0], stdout=subprocess.PIPE).stdout
+comm_result = fd_popen.read().strip()
+print(comm_result)
+print(comm_result.decode('utf-8'))
+print(type(comm_result.decode('utf-8')))
