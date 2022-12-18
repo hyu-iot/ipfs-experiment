@@ -1,12 +1,18 @@
 # ipfs-experiment
 IPFS experiment code file
 
-It shows communication between echo-client and echo-server.
+It shows communication between 2 raspberri pi clients, 1 command_client, and 1 main server.
 
 ## Testing
 - Environment setting
-  - Two computers or two server
-  - client and server code use the server's ip address
+  - We need total 4 terminals to implement testing
+  - We need to install some packages
+    - pip3 install pandas
+    - pip3 install os
+    - pip3 install psutil
+
 - Implement
-  - python3 multiconn-server.py 127.0.0.1
-  - python3 multiconn-client.py info.csv command.txt
+  - python3 Main_server.py
+  - python3 rc_0.py info.csv
+  - python3 rc_1.py info.csv
+  - python3 Comm_client.py info.csv command.txt
