@@ -65,7 +65,7 @@ def service_connection(key, mask):
     data = key.data
     if mask & selectors.EVENT_READ:
         start_time = datetime.now()
-        recv_data = sock.recv(1024)  # Should be ready to read
+        recv_data = sock.recv(4096)  # Should be ready to read
         if recv_data:
             data.recv_total += len(recv_data)
             # print(recv_data[:7])

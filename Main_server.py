@@ -37,7 +37,7 @@ def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
     if mask & selectors.EVENT_READ:
-        recv_data = sock.recv(1024)  # Should be ready to read
+        recv_data = sock.recv(4096)  # Should be ready to read
         if recv_data:
             recv_data_str = recv_data.decode('utf-8')
             if recv_data_str[:len("Hello")] == "Hello":
@@ -68,6 +68,7 @@ def service_connection(key, mask):
                         print(recv_data_str.encode('utf-8'))
                         sock = client_list["sock"][i] 
                         data = client_list["data"][i] 
+                        print(sock, data)
                         data.outb += recv_data_str.encode('utf-8')
                         sent = sock.send(data.outb)  # Should be ready to write
                         data.outb = data.outb[sent:]
