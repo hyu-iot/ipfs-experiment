@@ -5,6 +5,7 @@ import types
 import subprocess
 import time
 from datetime import datetime
+import psutil
 
 
 
@@ -48,8 +49,8 @@ def service_connection(key, mask):
                     if k == name:
                         print(f"Received {recv_data} from client {name}")
                         del client_list["data"][j], client_list["sock"][j]
-                        client_list["data"][j].append(data)
-                        client_list["sock"][j].append(sock)
+                        client_list["data"].append(data)
+                        client_list["sock"].append(sock)
                         reply_block = 1
                         break
                 if reply_block == 1:
@@ -58,7 +59,6 @@ def service_connection(key, mask):
                     client_list["sock"].append(sock)
                     client_list["id"].append(name)
                     client_list["data"].append(data)
-                # print(f"Received {recv_data} from client {name}")
                 print(client_list)
             elif recv_data_str[:7] == "Command":
                 print(recv_data_str.split(" ")[1])
@@ -137,4 +137,6 @@ try:
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
 finally:
+    lsock.close()
     sel.close()
+    print("Finished")

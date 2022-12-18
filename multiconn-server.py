@@ -31,6 +31,7 @@ def service_connection(key, mask):
             print(f"Received command {recv_data} ")
             result = recv_data.decode('utf-8')
             res = result.split(' ')
+            print(res)
             fd_popen = subprocess.Popen(res, stdout=subprocess.PIPE).stdout
             comm_result = fd_popen.read().strip()
             print(comm_result)

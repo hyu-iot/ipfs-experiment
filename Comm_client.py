@@ -7,6 +7,7 @@ import os
 import subprocess
 import time
 from datetime import datetime
+import psutil
 
 
 
@@ -20,20 +21,33 @@ messages = ["Comm_client"]
 #     messages.append((line.split('\n')[0]).encode('utf-8'))
 #     f.close()
 
+
+f = open(sys.argv[2], 'r')
+lines = f.readlines()
+send_command = {"id": [] , "command": []}
+for line in lines:
+    line_v = line.strip()
+    if line_v[0] == '#':
+        continue
+    send_command["id"].append(line_v.split('\n')[0].split(" ",maxsplit=1)[0])
+    send_command["command"].append(line_v.split('\n')[0].split(" ",maxsplit=1)[1])
+f.close()
+print(send_command)
+
+
 def start_connections(host, port, ip_num):
         server_addr = (host,port)
         connid = ip_num
         print(f"Starting connection {connid} to {server_addr}")
         
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print(sock)
         sock.setblocking(True)
+        sock.settimeout(5)
         try:
             sock.connect(server_addr)
         except:
-            print("exception occurred")
+            print("Connection Failed.\nLet's restart to connect to server")
         events = selectors.EVENT_READ | selectors.EVENT_WRITE
-        print(messages[0].encode('utf-8'))
         to_list = []
         to_list.append(messages[0].encode('utf-8'))
         data = types.SimpleNamespace(
@@ -62,8 +76,9 @@ def service_connection(key, mask):
             elif result[:11] == "client_info":
                 for info in result.split(" ")[1:-1]:
                     print(info)
-                    data.outb += "Command ".encode('utf-8') + info.encode('utf-8') + " ls".encode('utf-8')
-                    print("Command ".encode('utf-8') + info.encode('utf-8') + " ls".encode('utf-8'))
+                    data.outb += "Command ".encode('utf-8') + info.encode('utf-8') + (" " + send_command["command"][0]).encode('utf-8')
+                    # data.outb += "Command ".encode('utf-8') + info.encode('utf-8') + " ls".encode('utf-8')
+                    print("Command ".encode('utf-8') + info.encode('utf-8') + (" " + send_command["command"][0]).encode('utf-8'))
                     sent = sock.send(data.outb)  # Should be ready to write
                     time.sleep(1)
                     data.outb = data.outb[sent:]
@@ -103,7 +118,8 @@ try:
                 service_connection(key, mask)
         # Check for a socket being monitored to continue.
         if not sel.get_map():
-            break
+            time.sleep(50)
+            start_connections(ip_data["ip_address"][0] , port, len(ip_data))
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
 finally:

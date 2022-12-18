@@ -1,4 +1,4 @@
-1 ls
+1 ls -l
 # 3 pwd
 # 2 ls -l
 # 3 ls
