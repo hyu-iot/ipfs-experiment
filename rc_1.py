@@ -9,12 +9,39 @@ import time
 from datetime import datetime
 import psutil
 
-
-
+hello_rc = 0
+hello_cc = 1
+hello_ms = 2
+command_rc = 3
+command_cc = 4
+command_ms = 5
+result_rc = 6
+result_ms = 7
+client_info_cc = 10
+client_info_ms = 11
 sel = selectors.DefaultSelector()
 
-messages = ["Hello yeongbin"]
+id = "yunsang"
 execute_file = "loop.py" 
+
+def write_bytes(str_len):
+    str_buf = bytearray(4)
+    num = str_len
+    order = 0
+    while True:
+        if num == 0:
+            break
+        str_buf[3-order] = int(hex(num % 256),16)
+        num = num >> 8
+        order += 1
+    return str_buf
+        
+def payload_buf_length(buffer):
+    num = 0;
+    for i in range(4):
+        num |= buffer[i] << 8*(3-i) 
+
+    return num
 
 def _check_usage_of_cpu_and_memory():
     
@@ -22,7 +49,6 @@ def _check_usage_of_cpu_and_memory():
     py  = psutil.Process(pid)
     
     cpu_usage   = os.popen("ps aux | grep " + str(pid) + " | grep -v grep | awk '{print $3}'").read()
-    print("ps aux | grep " + str(pid) + " | grep -v grep | awk '{print $3}'")
     cpu_usage   = cpu_usage.replace("\n","")
     
     memory_usage  = round(py.memory_info()[0] /2.**30, 2)
@@ -38,6 +64,16 @@ def get_size(bytes):
             return f"{bytes:.2f}{unit}B"
         bytes /= 1024
 
+def payload_concat(msg_type, msg):
+    messages_len = len(msg) + 4 + 1
+    messages = bytearray(messages_len)
+    messages[0] = int(hex(msg_type),16)
+    messages[1:5] = write_bytes(len(msg))
+    messages[5:] = bytes.fromhex(msg.encode('utf-8').hex())
+
+    return messages
+
+
 def start_connections(host, port, ip_num):
         server_addr = (host,port)
         connid = ip_num
@@ -51,8 +87,10 @@ def start_connections(host, port, ip_num):
         except:
             print("Connection Failed.\nLet's restart to connect to server")
         events = selectors.EVENT_READ | selectors.EVENT_WRITE
+        messages_buf = payload_concat(hello_rc, id)
+        print(messages_buf)
         to_list = []
-        to_list.append(messages[0].encode('utf-8'))
+        to_list.append(messages_buf)
         data = types.SimpleNamespace(
             connid=connid,
             msg_total=len(to_list[0]),
@@ -69,18 +107,19 @@ def service_connection(key, mask):
         start_time = datetime.now()
         recv_data = sock.recv(4096)  # Should be ready to read
         if recv_data:
+            print(recv_data)
             data.recv_total += len(recv_data)
-            
-            print(f"Received command  {recv_data} ")
-            recv_str = recv_data.decode('utf-8')
-            if recv_str[:7] == "Command":
-                comm_data = recv_str.split(" ")[2:]
+            if recv_data[0] == command_ms:
+                num1 = payload_buf_length(recv_data[1:5])
+                print(f"Receive the message: {recv_data[5:5+num1].decode('utf-8')}")
+                
+                comm_data = recv_data[5:5+num1].decode('utf-8').split(" ")
                 comm_data.insert(0,'python3')
                 comm_data.insert(1,execute_file)
                 print(comm_data)
                 fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE)
                 try:
-                    outs, err = fd_popen.communicate(timeout=5)
+                    outs, err = fd_popen.communicate(timeout=15)
                 except TimeoutError:
                     fd_popen.kill()
                 finally:
@@ -89,6 +128,7 @@ def service_connection(key, mask):
                     comm_recv_str = outs.decode('utf-8')
                 else:
                     comm_recv_str = err.decode('utf-8')
+                # print(comm_recv_str)
                 cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                 # fd_popen = subprocess.Popen(res, stdout=subprocess.PIPE).stdout
                 io = psutil.net_io_counters()
@@ -97,18 +137,16 @@ def service_connection(key, mask):
                         f", Download usage: {get_size(io.bytes_recv)}   ")
                 cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                 cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
-                # cpu_usage : str, memory_usage: float, network_usage: str
-                print(f"cpu_usage's type : {type(cpu_usage)}\nmemory_usage's type : {type(memory_usage)}\n"
-                                                    f"network_usage's type : {type(get_size(io.bytes_sent))}")
-
-                data.outb += "result ".encode('utf-8')
-                data.outb += comm_recv_str.encode('utf-8')
+                print(len(comm_recv_str))
+                print(type(len(comm_recv_str)))   
+                messages_buf = payload_concat(result_rc,comm_recv_str)
+                data.outb += messages_buf
                 recv_time = datetime.now()
-                data.outb += bytes(" runtime ", 'utf-8')
-                data.outb += bytes(str(recv_time - start_time) + str("\n"), 'utf-8')
                 print(f"timestamp: {recv_time - start_time}")
-            elif recv_str[:5] == "Hello":
-                print("Good!")
+                time.sleep(3)
+            elif recv_data[0] == hello_ms:
+                num1 = payload_buf_length(recv_data[1:5])
+                print(f"Receive the message: {recv_data[5:5+num1].decode('utf-8')}")
                 
         if not recv_data or data.recv_total == data.msg_total:
             print(f"Closing connection {data.connid}")
@@ -122,7 +160,7 @@ def service_connection(key, mask):
             sent = sock.send(data.outb)  # Should be ready to write
             time.sleep(1)
             data.outb = data.outb[sent:]
-
+                
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} <host info>")
     sys.exit(1)
@@ -146,6 +184,6 @@ try:
 
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
-
+    
 finally:
     sel.close()

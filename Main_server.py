@@ -13,6 +13,10 @@ hello_rc = 0
 hello_cc = 1
 hello_ms = 2
 command_rc = 3
+command_cc = 4
+command_ms = 5
+result_rc = 6
+result_ms = 7
 client_info_cc = 10
 client_info_ms = 11
 sel = selectors.DefaultSelector()
@@ -65,7 +69,8 @@ def service_connection(key, mask):
         if recv_data:
             if recv_data[0] == hello_rc:
                 name_num = payload_buf_length(recv_data[1:5])
-                name = recv_data[5:5 + name_num]
+                name = recv_data[5:5 + name_num].decode('utf-8')
+                print(name)
                 messages_buf = payload_concat(hello_ms, "secure connection")
                 data.outb += messages_buf
                 reply_block = 0
@@ -84,43 +89,55 @@ def service_connection(key, mask):
                     client_list["id"].append(name)
                     client_list["data"].append(data)
                 print(client_list)
-            elif recv_data[0] == "Command":
-                print(recv_data.split(" ")[1])
+            elif recv_data[0] == command_cc:
+                num1 = payload_buf_length(recv_data[1:5])
+                print(f"Receive the message: {recv_data[5:5+num1].decode('utf-8')}")
+                name_length = int(recv_data[5:6].decode('utf-8'))
+                name = recv_data[6:6+name_length].decode('utf-8')
+                print(name)
+                command_length = recv_data[6+name_length:7+name_length].decode('utf-8')
+                command = recv_data[7+name_length:5+num1].decode('utf-8')
+                print(command)
                 for i,j in enumerate(client_list["id"]):
-                    if recv_data.split(" ")[1] == j:
-                        print("여기")
-                        print(recv_data.encode('utf-8'))
+                    if name == j:
                         sock = client_list["sock"][i] 
-                        data = client_list["data"][i] 
-                        print(sock, data)
-                        data.outb += recv_data.encode('utf-8')
+                        data = client_list["data"][i]
+                        messages_buf = payload_concat(command_ms,command)
+                        data.outb += messages_buf
                         sent = sock.send(data.outb)  # Should be ready to write
                         data.outb = data.outb[sent:]
-            elif recv_data[:6] == "result":
+            elif recv_data[0] == result_rc:
+                num1 = payload_buf_length(recv_data[1:5])
+                print(num1)
+                print(f"Receive the message: {recv_data[5:5+num1].decode('utf-8')}")
                 sock = command_client["sock"][0] 
                 data = command_client["data"][0]
-                data.outb = recv_data.encode('utf-8')
+                messages_buf = payload_concat(result_ms, recv_data[5:5+num1].decode('utf-8'))
+                data.outb = messages_buf
                 print(f"Echoing {data.outb!r} to {data.addr}")
                 sent = sock.send(data.outb)  # Should be ready to write
                 data.outb = data.outb[sent:]
 
-            elif recv_data[:11] == hello_cc:
-                data.outb += "Thank you for your connection".encode('utf-8')
+            elif recv_data[0] == hello_cc:
+                name_num = payload_buf_length(recv_data[1:5])
+                name = recv_data[5:5 + name_num].decode('utf-8')
+                print(name)
+                messages_buf = payload_concat(hello_ms, "secure connection")
+                data.outb += messages_buf
                 if not command_client["sock"]:    
                     command_client["sock"].append(sock)
-                    command_client["id"].append("computer")
+                    command_client["id"].append(name)
                     command_client["data"].append(data)
                 else:    
                     command_client["sock"][0] = sock
-                    command_client["id"][0] = "computer"
+                    command_client["id"][0] = name
                     command_client["data"][0] = data
-                print(f"Received {recv_data} from client computer")
-                print(command_client)
-            elif recv_data[:11] == "client_info":
-                data.outb += "client_info ".encode('utf-8')
-                for i in range(len(client_list["id"])):
-                    data.outb += client_list["id"][i].encode('utf-8')
-                    data.outb += " ".encode('utf-8')
+                print(f"Received hello message from client computer")
+            elif recv_data[0] == client_info_cc:
+                num1 = payload_buf_length(recv_data[1:5])
+                print(f"Receive the message: {recv_data[5:5+num1].decode('utf-8')}")
+                messages_buf = payload_concat(client_info_ms,' '.join(map(str, client_list["id"])))
+                data.outb += messages_buf
             else:
                 print(f"Closing connection to {data.addr} !!")
                 sel.unregister(sock)

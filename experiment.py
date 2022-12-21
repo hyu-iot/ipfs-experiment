@@ -60,3 +60,15 @@ if messages[0] == hello_rc:
     print("hello")
     num1 = payload_buf_length(messages[1:5])
     print(num1)
+
+
+def payload_concat(msg_type, msg):
+    messages_len = len(msg) + 4 + 1
+    messages = bytearray(messages_len)
+    messages[0] = int(hex(msg_type),16)
+    messages[1:5] = write_bytes(len(msg))
+    messages[5:] = bytes.fromhex(msg.encode('utf-8').hex())
+
+    return messages
+
+msg_buf = payload_concat(1, )

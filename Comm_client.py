@@ -16,6 +16,10 @@ hello_rc = 0
 hello_cc = 1
 hello_ms = 2
 command_rc = 3
+command_cc = 4
+command_ms = 5
+result_rc = 6
+result_ms = 7
 client_info_cc = 10
 client_info_ms = 11
 sel = selectors.DefaultSelector()
@@ -107,23 +111,27 @@ def service_connection(key, mask):
             # print(recv_data[:7])
             # print(f"Received command {recv_data} ")
             if recv_data[0] == hello_ms:
-                data.outb += "client_info".encode('utf-8')
+                messages_buf = payload_concat(client_info_cc,"please client's info")
+                data.outb += messages_buf
             elif recv_data[0] == client_info_ms:
-                print(recv_data.split(" ")[1:-1])
-                clients_list = recv_data.split(" ")[1:-1]
+                num1 = payload_buf_length(recv_data[1:5])
+                print(f"Receive the message: {recv_data[5:5+num1]}")
+                clients_list = recv_data[5:5+num1].decode('utf-8').split(" ")
                 print(clients_list)
                 clients_num = len(clients_list)
                 print(f"client number : {clients_num}")
                 for command in send_command["command"]:
                     choice_num = random.randrange(0, clients_num)
-                    print(f"choice num = {choice_num}")
-                    print("Command ".encode('utf-8') + clients_list[choice_num].encode('utf-8') + (" " + command).encode('utf-8'))
-                    data.outb += "Command ".encode('utf-8') + clients_list[choice_num].encode('utf-8') + (" " + command).encode('utf-8')
+                    messages_buf = payload_concat(command_cc,str(len(clients_list[choice_num])) + clients_list[choice_num] + str(len(command)) + command)
+                    data.outb += messages_buf
                     sent = sock.send(data.outb) 
                     data.outb = data.outb[sent:]
-            if recv_data[:6] == "result":
-                print(f"Final result")
-                print(recv_data.encode("utf-8"))
+                    time.sleep(3)
+
+            if recv_data[0] == result_ms:
+                num1 = payload_buf_length(recv_data[1:5])
+                print(f"Receive the message: {recv_data[5:5+num1].decode('utf-8')}")
+
 
         if not recv_data or data.recv_total == data.msg_total:
             print(f"Closing connection {data.connid}")
