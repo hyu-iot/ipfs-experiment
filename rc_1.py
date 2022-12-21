@@ -22,6 +22,7 @@ def _check_usage_of_cpu_and_memory():
     py  = psutil.Process(pid)
     
     cpu_usage   = os.popen("ps aux | grep " + str(pid) + " | grep -v grep | awk '{print $3}'").read()
+    print("ps aux | grep " + str(pid) + " | grep -v grep | awk '{print $3}'")
     cpu_usage   = cpu_usage.replace("\n","")
     
     memory_usage  = round(py.memory_info()[0] /2.**30, 2)
@@ -77,7 +78,17 @@ def service_connection(key, mask):
                 comm_data.insert(0,'python3')
                 comm_data.insert(1,execute_file)
                 print(comm_data)
-                fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE).stdout
+                fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE)
+                try:
+                    outs, err = fd_popen.communicate(timeout=5)
+                except TimeoutError:
+                    fd_popen.kill()
+                finally:
+                    pass
+                if outs:
+                    comm_recv_str = outs.decode('utf-8')
+                else:
+                    comm_recv_str = err.decode('utf-8')
                 cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                 # fd_popen = subprocess.Popen(res, stdout=subprocess.PIPE).stdout
                 io = psutil.net_io_counters()
@@ -85,10 +96,13 @@ def service_connection(key, mask):
                 print(f"Upload usage: {get_size(io.bytes_sent)}   "
                         f", Download usage: {get_size(io.bytes_recv)}   ")
                 cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
-                comm_recv_str = fd_popen.read().strip()
                 cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
+                # cpu_usage : str, memory_usage: float, network_usage: str
+                print(f"cpu_usage's type : {type(cpu_usage)}\nmemory_usage's type : {type(memory_usage)}\n"
+                                                    f"network_usage's type : {type(get_size(io.bytes_sent))}")
+
                 data.outb += "result ".encode('utf-8')
-                data.outb += comm_recv_str
+                data.outb += comm_recv_str.encode('utf-8')
                 recv_time = datetime.now()
                 data.outb += bytes(" runtime ", 'utf-8')
                 data.outb += bytes(str(recv_time - start_time) + str("\n"), 'utf-8')
@@ -108,7 +122,6 @@ def service_connection(key, mask):
             sent = sock.send(data.outb)  # Should be ready to write
             time.sleep(1)
             data.outb = data.outb[sent:]
-
 
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} <host info>")
@@ -133,5 +146,6 @@ try:
 
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
+
 finally:
     sel.close()

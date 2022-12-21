@@ -9,11 +9,35 @@ import time
 from datetime import datetime
 import psutil
 
-
+hello_rc = 0
+hello_cc = 1
+hello_ms = 2
+command_rc = 3
+client_info_cc = 10
+client_info_ms = 11
 sel = selectors.DefaultSelector()
 
-messages = ["Hello yunsang"]
+id = "yunsang"
 execute_file = "loop.py" 
+
+def write_bytes(str_len):
+    str_buf = bytearray(4)
+    num = str_len
+    order = 0
+    while True:
+        if num == 0:
+            break
+        str_buf[3-order] = int(hex(num % 256),16)
+        num = num >> 8
+        order += 1
+    return str_buf
+        
+def payload_buf_length(buffer):
+    num = 0;
+    for i in range(4):
+        num |= buffer[i] << 8*(3-i) 
+
+    return num
 
 def _check_usage_of_cpu_and_memory():
     
@@ -36,15 +60,22 @@ def get_size(bytes):
             return f"{bytes:.2f}{unit}B"
         bytes /= 1024
 
+def payload_concat(msg_type, msg):
+    messages_len = len(msg) + 4 + 1
+    messages = bytearray(messages_len)
+    messages[0] = int(hex(msg_type),16)
+    messages[1:5] = write_bytes(len(msg))
+    messages[5:] = bytes.fromhex(msg.encode('utf-8').hex())
+
+    return messages
+
 
 def start_connections(host, port, ip_num):
         server_addr = (host,port)
         connid = ip_num
-        
         print(f"Starting connection {connid} to {server_addr}")
         
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
         sock.setblocking(True)
         sock.settimeout(10)
         try:
@@ -52,8 +83,9 @@ def start_connections(host, port, ip_num):
         except:
             print("Connection Failed.\nLet's restart to connect to server")
         events = selectors.EVENT_READ | selectors.EVENT_WRITE
+        messages_buf = payload_concat(hello_rc, id)
         to_list = []
-        to_list.append(messages[0].encode('utf-8'))
+        to_list.append(messages_buf)
         data = types.SimpleNamespace(
             connid=connid,
             msg_total=len(to_list[0]),
@@ -71,15 +103,22 @@ def service_connection(key, mask):
         recv_data = sock.recv(4096)  # Should be ready to read
         if recv_data:
             data.recv_total += len(recv_data)
-            
-            print(f"Received command  {recv_data} ")
-            recv_str = recv_data.decode('utf-8')
-            if recv_str[:7] == "Command":
-                comm_data = recv_str.split(" ")[2:]
+            if recv_data[:7] == "Command":
+                comm_data = recv_data.split(" ")[2:]
                 comm_data.insert(0,'python3')
                 comm_data.insert(1,execute_file)
                 print(comm_data)
-                fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE).stdout
+                fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE)
+                try:
+                    outs, err = fd_popen.communicate(timeout=15)
+                except TimeoutError:
+                    fd_popen.kill()
+                finally:
+                    pass
+                if outs:
+                    comm_recv_str = outs.decode('utf-8')
+                else:
+                    comm_recv_str = err.decode('utf-8')
                 cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                 # fd_popen = subprocess.Popen(res, stdout=subprocess.PIPE).stdout
                 io = psutil.net_io_counters()
@@ -87,16 +126,17 @@ def service_connection(key, mask):
                 print(f"Upload usage: {get_size(io.bytes_sent)}   "
                         f", Download usage: {get_size(io.bytes_recv)}   ")
                 cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
-                comm_recv_str = fd_popen.read().strip()
                 cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
+
                 data.outb += "result ".encode('utf-8')
-                data.outb += comm_recv_str
+                data.outb += comm_recv_str.encode('utf-8')
                 recv_time = datetime.now()
                 data.outb += bytes(" runtime ", 'utf-8')
                 data.outb += bytes(str(recv_time - start_time) + str("\n"), 'utf-8')
                 print(f"timestamp: {recv_time - start_time}")
-            elif recv_str[:5] == "Hello":
-                print("Good!")
+            elif recv_data[0] == hello_ms:
+                num1 = payload_buf_length(recv_data[1:5])
+                print(f"Receive the message: {recv_data[5:5+num1].decode('utf-8')}")
                 
         if not recv_data or data.recv_total == data.msg_total:
             print(f"Closing connection {data.connid}")

@@ -10,15 +10,7 @@ from datetime import datetime
 import psutil
 
 command = sys.argv[1:]
-fd_popen = subprocess.Popen(command, stdout=subprocess.PIPE)
-try:
-    outs, err = fd_popen.communicate(timeout=15)
-except TimeoutError:
-    fd_popen.kill()
-finally:
-    pass
-
-if outs:
-    print(outs)
-else:
-    print(err)
+comm_str = ' '.join(s for s in command)
+count = 0
+fd_open = os.popen(comm_str).read()
+print(fd_open)

@@ -8,14 +8,21 @@ import subprocess
 import time
 from datetime import datetime
 import psutil
+import random
 
 
 
+hello_rc = 0
+hello_cc = 1
+hello_ms = 2
+command_rc = 3
+client_info_cc = 10
+client_info_ms = 11
 sel = selectors.DefaultSelector()
 # messages = [b"Message 1 from client.", b"Message 2 from client."]
 
 # f = open(sys.argv[2], 'r')
-messages = ["Comm_client"]
+id = "command client"
 # lines = f.readlines()
 # for line in lines:
 #     messages.append((line.split('\n')[0]).encode('utf-8'))
@@ -34,6 +41,33 @@ for line in lines:
 f.close()
 print(send_command)
 
+def write_bytes(str_len):
+    str_buf = bytearray(4)
+    num = str_len
+    order = 0
+    while True:
+        if num == 0:
+            break
+        str_buf[3-order] = int(hex(num % 256),16)
+        num = num >> 8
+        order += 1
+    return str_buf
+        
+def payload_buf_length(buffer):
+    num = 0;
+    for i in range(4):
+        num |= buffer[i] << 8*(3-i) 
+
+    return num
+
+def payload_concat(msg_type, msg):
+    messages_len = len(msg) + 4 + 1
+    messages = bytearray(messages_len)
+    messages[0] = int(hex(msg_type),16)
+    messages[1:5] = write_bytes(len(msg))
+    messages[5:] = bytes.fromhex(msg.encode('utf-8').hex())
+
+    return messages
 
 def start_connections(host, port, ip_num):
         server_addr = (host,port)
@@ -48,8 +82,10 @@ def start_connections(host, port, ip_num):
         except:
             print("Connection Failed.\nLet's restart to connect to server")
         events = selectors.EVENT_READ | selectors.EVENT_WRITE
+
+        messages_buf = payload_concat(hello_cc, id)
         to_list = []
-        to_list.append(messages[0].encode('utf-8'))
+        to_list.append(messages_buf)
         data = types.SimpleNamespace(
             connid=connid,
             msg_total=len(to_list[0]),
@@ -69,21 +105,25 @@ def service_connection(key, mask):
         if recv_data:
             data.recv_total += len(recv_data)
             # print(recv_data[:7])
-            print(f"Received command {recv_data} ")
-            result = recv_data.decode('utf-8')
-            if result[:5] == "Thank":
+            # print(f"Received command {recv_data} ")
+            if recv_data[0] == hello_ms:
                 data.outb += "client_info".encode('utf-8')
-            elif result[:11] == "client_info":
-                for info in result.split(" ")[1:-1]:
-                    print(info)
-                    data.outb += "Command ".encode('utf-8') + info.encode('utf-8') + (" " + send_command["command"][0]).encode('utf-8')
-                    # data.outb += "Command ".encode('utf-8') + info.encode('utf-8') + " ls".encode('utf-8')
-                    print("Command ".encode('utf-8') + info.encode('utf-8') + (" " + send_command["command"][0]).encode('utf-8'))
-                    sent = sock.send(data.outb)  # Should be ready to write
-                    time.sleep(1)
+            elif recv_data[0] == client_info_ms:
+                print(recv_data.split(" ")[1:-1])
+                clients_list = recv_data.split(" ")[1:-1]
+                print(clients_list)
+                clients_num = len(clients_list)
+                print(f"client number : {clients_num}")
+                for command in send_command["command"]:
+                    choice_num = random.randrange(0, clients_num)
+                    print(f"choice num = {choice_num}")
+                    print("Command ".encode('utf-8') + clients_list[choice_num].encode('utf-8') + (" " + command).encode('utf-8'))
+                    data.outb += "Command ".encode('utf-8') + clients_list[choice_num].encode('utf-8') + (" " + command).encode('utf-8')
+                    sent = sock.send(data.outb) 
                     data.outb = data.outb[sent:]
-                # print("Good!")
-            # print(f"Received command {result} ")
+            if recv_data[:6] == "result":
+                print(f"Final result")
+                print(recv_data.encode("utf-8"))
 
         if not recv_data or data.recv_total == data.msg_total:
             print(f"Closing connection {data.connid}")
