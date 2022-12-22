@@ -19,7 +19,10 @@ result_rc = 6
 result_ms = 7
 client_info_cc = 10
 client_info_ms = 11
-bytes_num = 4096
+add_message = 20
+bytes_num = 1024
+
+
 
 
 sel = selectors.DefaultSelector()
@@ -71,7 +74,7 @@ def payload_concat(msg_type, msg):
     messages_len = len(msg) + 4 + 1
     messages = bytearray(messages_len)
     messages[0] = int(hex(msg_type),16)
-    if len(msg) > bytes_num:
+    if len(msg) + 5 > bytes_num:
         messages[1] = int(hex(1),16)
     else:
         messages[1] = int(hex(0),16)
@@ -79,6 +82,7 @@ def payload_concat(msg_type, msg):
     messages[6:] = bytes.fromhex(msg.encode('utf-8').hex())
 
     return messages
+
 
 def start_connections(host, port, ip_num):
         server_addr = (host,port)
@@ -115,53 +119,59 @@ def service_connection(key, mask):
         if recv_data:
             print(recv_data)
             data.recv_total += len(recv_data)
-            if recv_data[0] == command_ms:
+
+            total_len = len(recv_data)
+            print(recv_data)
+            while True:
                 num1 = payload_buf_length(recv_data[2:6])
-                print(f"Receive the message: {recv_data[5:5+num1].decode('utf-8')}")
-                
-                comm_data = recv_data[5:5+num1].decode('utf-8').split(" ")
-                # comm_data.insert(0,'time')
-                # comm_data.insert(1,'python3')
-                comm_data.insert(0,'python3')
-                comm_data.insert(1,execute_file)
-                comm_data.insert(2,'time')
-                # comm_data.insert(2,'time')
-                print(comm_data)
-                fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE)
-                
-                try:
-                    print("여기")
-                    outs, err = fd_popen.communicate(timeout=15)
-                    print("여기")
+                print(f"total {total_len}, num {num1+6}")
+                total_len -= (num1 + 6)
+
+                if recv_data[0] == command_ms:
+                    print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
                     
-                except TimeoutError:
-                    fd_popen.kill()
-                finally:
-                    pass
-                if outs:
-                    comm_recv_str = outs.decode('utf-8')
-                else:
-                    comm_recv_str = err.decode('utf-8')
-                # print(comm_recv_str)
-                cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
-                # fd_popen = subprocess.Popen(res, stdout=subprocess.PIPE).stdout
-                io = psutil.net_io_counters()
-                bytes_sent, bytes_recv = io.bytes_sent, io.bytes_recv
-                print(f"Upload usage: {get_size(io.bytes_sent)}   "
-                        f", Download usage: {get_size(io.bytes_recv)}   ")
-                cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
-                cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
-                print(len(comm_recv_str))
-                print(type(len(comm_recv_str)))   
-                messages_buf = payload_concat(result_rc,comm_recv_str)
-                data.outb += messages_buf
-                recv_time = datetime.now()
-                print(f"timestamp: {recv_time - start_time}")
-                time.sleep(3)
-            elif recv_data[0] == hello_ms:
-                num1 = payload_buf_length(recv_data[2:6])
-                print(f"Receive the message: {recv_data[5:5+num1].decode('utf-8')}")
-                
+                    comm_data = recv_data[6:6+num1].decode('utf-8').split(" ")
+                    # comm_data.insert(0,'time')
+                    # comm_data.insert(1,'python3')
+                    # comm_data.insert(2,execute_file)
+                    comm_data.insert(0,'python3')
+                    comm_data.insert(1,execute_file)
+                    comm_data.insert(2,'time')
+                    
+                    print(comm_data)                
+                    cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
+                    fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE)
+                    cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
+
+                    try:
+                        outs, err = fd_popen.communicate(timeout=15)
+                    except TimeoutError:
+                        fd_popen.kill()
+                    finally:
+                        pass
+                    if outs:
+                        comm_recv_str = outs.decode('utf-8')
+                    else:
+                        comm_recv_str = err.decode('utf-8')
+
+                    cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
+                    io = psutil.net_io_counters()
+                    bytes_sent, bytes_recv = io.bytes_sent, io.bytes_recv
+                    print(f"Upload usage: {get_size(io.bytes_sent)}   "
+                            f", Download usage: {get_size(io.bytes_recv)}   ")
+                    print(len(comm_recv_str))
+                    print(type(len(comm_recv_str)))
+                    messages_buf = payload_concat(result_rc, comm_recv_str)
+                    data.outb += messages_buf
+                    recv_time = datetime.now()
+                    print(f"timestamp: {recv_time - start_time}")
+
+                elif recv_data[0] == hello_ms:
+                    print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
+                if total_len <= 0:
+                    break
+                recv_data = recv_data[6+num1:]
+                    
         if not recv_data or data.recv_total == data.msg_total:
             print(f"Closing connection {data.connid}")
             sel.unregister(sock)
@@ -171,8 +181,7 @@ def service_connection(key, mask):
             data.outb = data.messages.pop(0)
         if data.outb:
             print(f"Sending {data.outb!r} to connection {data.connid}")
-            sent = sock.send(data.outb)  # Should be ready to write
-            time.sleep(1)
+            sent = sock.send(data.outb) 
             data.outb = data.outb[sent:]
                 
 if len(sys.argv) != 2:

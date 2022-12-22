@@ -121,32 +121,40 @@ def service_connection(key, mask):
         recv_data = sock.recv(bytes_num)  # Should be ready to read
         if recv_data:
             data.recv_total += len(recv_data)
-            if recv_data[0] == add_message:
-                num1 = payload_buf_length(recv_data[2:6])
-                print(f"Addition to messages {recv_data[6:6+num1].decode('utf-8')}")
-            # print(recv_data[:7])
-            # print(f"Received command {recv_data} ")
-            if recv_data[0] == hello_ms:
-                messages_buf = payload_concat(client_info_cc,"please client's info")
-                data.outb += messages_buf
-            elif recv_data[0] == client_info_ms:
-                num1 = payload_buf_length(recv_data[2:6])
-                print(f"Receive the message: {recv_data[6:6+num1]}")
-                clients_list = recv_data[6:6+num1].decode('utf-8').split(" ")
-                print(clients_list)
-                clients_num = len(clients_list)
-                print(f"client number : {clients_num}")
-                for command in send_command["command"]:
-                    choice_num = random.randrange(0, clients_num)
-                    messages_buf = payload_concat(command_cc,str(len(clients_list[choice_num])) + clients_list[choice_num] + str(len(command)) + command)
-                    data.outb += messages_buf
-                    sent = sock.send(data.outb) 
-                    data.outb = data.outb[sent:]
-                    time.sleep(3)
+            total_len = len(recv_data)
+            while True:
 
-            if recv_data[0] == result_ms:
                 num1 = payload_buf_length(recv_data[2:6])
-                print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
+                print(f"total {total_len}, num {num1+6}")
+                total_len -= (num1 + 6)
+
+                if recv_data[0] == add_message:
+                    print(f"Addition to messages {recv_data[6:6+num1].decode('utf-8')}")
+                # print(recv_data[:7])
+                # print(f"Received command {recv_data} ")
+                if recv_data[0] == hello_ms:
+                    messages_buf = payload_concat(client_info_cc,"please client's info")
+                    data.outb += messages_buf
+                elif recv_data[0] == client_info_ms:
+                    print(f"Receive the message: {recv_data[6:6+num1]}")
+                    clients_list = recv_data[6:6+num1].decode('utf-8').split(" ")
+                    print(clients_list)
+                    clients_num = len(clients_list)
+                    print(f"client number : {clients_num}")
+                    for command in send_command["command"]:
+                        choice_num = random.randrange(0, clients_num)
+                        messages_buf = payload_concat(command_cc,str(len(clients_list[choice_num])) + clients_list[choice_num] + str(len(command)) + command)
+                        data.outb += messages_buf
+                        sent = sock.send(data.outb) 
+                        data.outb = data.outb[sent:]
+                        print(f"Send the messages: {messages_buf[6:].decode('utf-8')}")
+
+                if recv_data[0] == result_ms:
+                    print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
+
+                if total_len <= 0:
+                    break
+                recv_data = recv_data[6+num1:]
 
 
         if not recv_data or data.recv_total == data.msg_total:
@@ -158,8 +166,7 @@ def service_connection(key, mask):
             data.outb = data.messages.pop(0)
         if data.outb:
             print(f"Sending {data.outb!r} to connection {data.connid}")
-            sent = sock.send(data.outb)  # Should be ready to write
-            time.sleep(1)
+            sent = sock.send(data.outb)  
             data.outb = data.outb[sent:]
 
 

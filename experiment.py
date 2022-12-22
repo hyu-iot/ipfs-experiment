@@ -14,3 +14,12 @@ comm_str = ' '.join(s for s in command)
 count = 0
 fd_open = os.popen(comm_str).read()
 # print(fd_open)
+
+messages = bytearray(18)
+messages[0] = int(hex(5),16)
+
+print(messages)
+
+messages = messages[5:]
+
+print(messages)
