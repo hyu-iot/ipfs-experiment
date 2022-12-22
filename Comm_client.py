@@ -22,7 +22,16 @@ result_rc = 6
 result_ms = 7
 client_info_cc = 10
 client_info_ms = 11
+add_message = 20
+bytes_num = 1024
+
+
+
+
 sel = selectors.DefaultSelector()
+
+bytes_num = bytes_num
+
 # messages = [b"Message 1 from client.", b"Message 2 from client."]
 
 # f = open(sys.argv[2], 'r')
@@ -68,8 +77,12 @@ def payload_concat(msg_type, msg):
     messages_len = len(msg) + 4 + 1
     messages = bytearray(messages_len)
     messages[0] = int(hex(msg_type),16)
-    messages[1:5] = write_bytes(len(msg))
-    messages[5:] = bytes.fromhex(msg.encode('utf-8').hex())
+    if len(msg) + 5 > bytes_num:
+        messages[1] = int(hex(1),16)
+    else:
+        messages[1] = int(hex(0),16)
+    messages[2:6] = write_bytes(len(msg))
+    messages[6:] = bytes.fromhex(msg.encode('utf-8').hex())
 
     return messages
 
@@ -105,18 +118,21 @@ def service_connection(key, mask):
     data = key.data
     if mask & selectors.EVENT_READ:
         start_time = datetime.now()
-        recv_data = sock.recv(4096)  # Should be ready to read
+        recv_data = sock.recv(bytes_num)  # Should be ready to read
         if recv_data:
             data.recv_total += len(recv_data)
+            if recv_data[0] == add_message:
+                num1 = payload_buf_length(recv_data[2:6])
+                print(f"Addition to messages {recv_data[6:6+num1].decode('utf-8')}")
             # print(recv_data[:7])
             # print(f"Received command {recv_data} ")
             if recv_data[0] == hello_ms:
                 messages_buf = payload_concat(client_info_cc,"please client's info")
                 data.outb += messages_buf
             elif recv_data[0] == client_info_ms:
-                num1 = payload_buf_length(recv_data[1:5])
-                print(f"Receive the message: {recv_data[5:5+num1]}")
-                clients_list = recv_data[5:5+num1].decode('utf-8').split(" ")
+                num1 = payload_buf_length(recv_data[2:6])
+                print(f"Receive the message: {recv_data[6:6+num1]}")
+                clients_list = recv_data[6:6+num1].decode('utf-8').split(" ")
                 print(clients_list)
                 clients_num = len(clients_list)
                 print(f"client number : {clients_num}")
@@ -129,8 +145,8 @@ def service_connection(key, mask):
                     time.sleep(3)
 
             if recv_data[0] == result_ms:
-                num1 = payload_buf_length(recv_data[1:5])
-                print(f"Receive the message: {recv_data[5:5+num1].decode('utf-8')}")
+                num1 = payload_buf_length(recv_data[2:6])
+                print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
 
 
         if not recv_data or data.recv_total == data.msg_total:
