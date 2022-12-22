@@ -124,8 +124,9 @@ def service_connection(key, mask):
                         name_length = int(recv_data[6:7].decode('utf-8'))
                         name = recv_data[7:7+name_length].decode('utf-8')
                         print(name)
-                        command_length = recv_data[7+name_length:8+name_length].decode('utf-8')
-                        command = recv_data[8+name_length:6+num1].decode('utf-8')
+                        command_len_type = int(recv_data[7+name_length:8+name_length].decode('utf-8'))
+                        command_length = recv_data[8+name_length:8+name_length+command_len_type].decode('utf-8')
+                        command = recv_data[8+name_length+command_len_type:6+num1].decode('utf-8')
                         print(command)
                         for i,j in enumerate(client_list["id"]):
                             if name == j:

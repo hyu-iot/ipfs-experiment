@@ -1,6 +1,6 @@
-1 ls -l
+1 head -c 10240 < /dev/urandom > test_file4
 3 pwd
-2 ls -l
-3 ls
+2 head -c 10240 < /dev/urandom > test_file3
+3 head -c 1024 < /dev/urandom > test_file1
 # 1 pwd
 # 2 pwd

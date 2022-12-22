@@ -23,3 +23,5 @@ print(messages)
 messages = messages[5:]
 
 print(messages)
+
+print(len("time ipfs cat QmTZntCxWgZDooSEdSCnePpZy5nom2cbMr6edZgLgX7AnN > read_file1"))

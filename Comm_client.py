@@ -143,7 +143,12 @@ def service_connection(key, mask):
                     print(f"client number : {clients_num}")
                     for command in send_command["command"]:
                         choice_num = random.randrange(0, clients_num)
-                        messages_buf = payload_concat(command_cc,str(len(clients_list[choice_num])) + clients_list[choice_num] + str(len(command)) + command)
+                        command_len_type = 1
+                        if len(command) >= 10:
+                            command_len_type = 2
+                        elif len(command) >= 100:
+                            command_len_type = 3
+                        messages_buf = payload_concat(command_cc,str(len(clients_list[choice_num])) + clients_list[choice_num] + str(command_len_type) + str(len(command)) + command)
                         data.outb += messages_buf
                         sent = sock.send(data.outb) 
                         data.outb = data.outb[sent:]
