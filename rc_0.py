@@ -144,15 +144,15 @@ def service_connection(key, mask):
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
 
                     try:
-                        outs, err = fd_popen.communicate(timeout=15)
-                    except TimeoutError:
+                        outs, err = fd_popen.communicate(timeout=5)
+                    except subprocess.TimeoutExpired:
                         fd_popen.kill()
-                    finally:
-                        pass
+                        outs = None
+                        err = "Timeout expired"
                     if outs:
                         comm_recv_str = outs.decode('utf-8')
                     else:
-                        comm_recv_str = err.decode('utf-8')
+                        comm_recv_str = err
 
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                     io = psutil.net_io_counters()

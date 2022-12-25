@@ -78,16 +78,18 @@ def service_connection(key, mask):
         if recv_data:
             total_len = len(recv_data)
             print(recv_data)
+            exceeded_num = 0
             while True:
                 if total_len <= 0:
                     break
                 num1 = payload_buf_length(recv_data[2:6])
                 print(f"total {total_len}, num {num1+6}")
+                
                 total_len -= (num1 + 6)
                 if payload_max_num == 1:
                     sock = command_client["sock"][0] 
                     data = command_client["data"][0]
-                    messages_buf = payload_concat(add_message,recv_data.decode('utf-8'))
+                    messages_buf = payload_concat(add_message,recv_data[:exceeded_num].decode('utf-8'))
                     data.outb += messages_buf
                     sent = sock.send(data.outb) 
                     data.outb = data.outb[sent:]
@@ -96,7 +98,7 @@ def service_connection(key, mask):
                 else:   
                     if recv_data[1] == 1:
                         payload_max_num = 1
-                        print("뭐하지?")
+                        exceeded_num = num1 - total_len
 
                     if recv_data[0] == hello_rc:
                         name = recv_data[6:6 + num1].decode('utf-8')
