@@ -15,7 +15,9 @@ hello_ms = 2
 command_rc = 3
 command_cc = 4
 command_ms = 5
-result_rc = 6
+result_default = 15
+result_rc_mf = 16
+result_rc_af = 17
 result_ms = 7
 client_info_cc = 10
 client_info_ms = 11
@@ -138,7 +140,7 @@ def service_connection(key, mask):
                                 data.outb += messages_buf
                                 sent = sock.send(data.outb)  # Should be ready to write
                                 data.outb = data.outb[sent:]
-                    elif recv_data[0] == result_rc:
+                    elif recv_data[0] == result_default or recv_data[0] == result_rc_mf or recv_data[0] == result_rc_af:
                         print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
                         sock = command_client["sock"][0] 
                         data = command_client["data"][0]

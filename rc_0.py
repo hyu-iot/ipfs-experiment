@@ -15,7 +15,9 @@ hello_ms = 2
 command_rc = 3
 command_cc = 4
 command_ms = 5
-result_rc = 6
+result_default = 15
+result_rc_mf = 16
+result_rc_af = 17
 result_ms = 7
 client_info_cc = 10
 client_info_ms = 11
@@ -129,15 +131,10 @@ def service_connection(key, mask):
 
                 if recv_data[0] == command_ms:
                     print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
-                    
+                    result_rc = result_default
                     comm_data = recv_data[6:6+num1].decode('utf-8').split(" ")
-                    # comm_data.insert(0,'time')
-                    # comm_data.insert(1,'python3')
-                    # comm_data.insert(2,execute_file)
                     comm_data.insert(0,'python3')
                     comm_data.insert(1,execute_file)
-                    comm_data.insert(2,'time')
-                    
                     print(comm_data)                
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                     fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE)
@@ -154,6 +151,13 @@ def service_connection(key, mask):
                     else:
                         comm_recv_str = err
 
+                    if comm_data[3] == "ipfs" and comm_data[4] == "add":
+                        result_rc = result_rc_af
+                        comm_recv_str = comm_recv_str.split(" ")[1] + comm_recv_str.split("\n")[1]
+                    elif comm_data[2] == "head" and comm_data[3] == "-c":
+                        result_rc = result_rc_mf
+                        comm_recv_str = "File creation success" + comm_recv_str
+                    
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                     io = psutil.net_io_counters()
                     bytes_sent, bytes_recv = io.bytes_sent, io.bytes_recv
