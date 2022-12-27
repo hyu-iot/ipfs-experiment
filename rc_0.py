@@ -26,7 +26,6 @@ bytes_num = 1024
 
 
 
-
 sel = selectors.DefaultSelector()
 
 id = "yeongbin"
@@ -44,6 +43,12 @@ def write_bytes(str_len):
         order += 1
     return str_buf
         
+def sub_write_bytes(sub_message):
+    str_length = str(len(sub_message)-17)
+    str_length_len = str(len(str_length))
+    
+    return str_length_len + str_length +sub_message
+
 def payload_buf_length(buffer):
     num = 0;
     for i in range(4):
@@ -146,17 +151,19 @@ def service_connection(key, mask):
                         fd_popen.kill()
                         outs = None
                         err = "Timeout expired"
+
                     if outs:
-                        comm_recv_str = outs.decode('utf-8')
+                        comm_recv_str = outs.decode('utf-8').strip("\n")
                     else:
                         comm_recv_str = err
-
+                    print(comm_recv_str)
                     if comm_data[3] == "ipfs" and comm_data[4] == "add":
                         result_rc = result_rc_af
-                        comm_recv_str = comm_recv_str.split(" ")[1] + comm_recv_str.split("\n")[1]
+                        hash_value = comm_recv_str.split(" ")[1] + comm_recv_str.split("\n")[1]
+                        comm_recv_str = sub_write_bytes(hash_value)
                     elif comm_data[2] == "head" and comm_data[3] == "-c":
                         result_rc = result_rc_mf
-                        comm_recv_str = "File creation success" + comm_recv_str
+                        comm_recv_str = comm_recv_str
                     
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                     io = psutil.net_io_counters()

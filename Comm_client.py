@@ -56,6 +56,23 @@ for line in lines:
 f.close()
 print(send_command)
 
+
+def split_result(res, total_len):
+    res_list = []
+    num3 = 0
+    while True:
+        if total_len == num3:
+            break
+        num = int(res[0])
+        payload_len = int(res[1:1+num])
+        result = res[1+num:1+num+payload_len]
+        res_list.append(result)
+        print(result)
+        num3 += num +1 +payload_len
+        res = res[1+num+payload_len:]
+    return res_list
+
+
 def write_bytes(str_len):
     str_buf = bytearray(4)
     num = str_len
@@ -114,10 +131,12 @@ def start_connections(host, port, ip_num):
         )
         sel.register(sock, events, data=data)
 
-
+clients_list = []
+total_result_list = []
 def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
+    global clients_list
     if mask & selectors.EVENT_READ:
         start_time = datetime.now()
         recv_data = sock.recv(bytes_num)  # Should be ready to read
@@ -143,7 +162,39 @@ def service_connection(key, mask):
                     print(clients_list)
                     clients_num = len(clients_list)
                     print(f"client number : {clients_num}")
-                    for command in send_command["command"]:
+                    # for command in send_command["command"]:
+                    command = send_command["command"][0]
+                    choice_num = random.randrange(0, clients_num)
+                    command_len_type = 1
+                    if len(command) >= 10:
+                        command_len_type = 2
+                    elif len(command) >= 100:
+                        command_len_type = 3
+                    messages_buf = payload_concat(command_cc,str(len(clients_list[choice_num])) + clients_list[choice_num] + str(command_len_type) + str(len(command)) + command)
+                    data.outb += messages_buf
+                    sent = sock.send(data.outb) 
+                    data.outb = data.outb[sent:]
+                    del send_command["command"][0]
+                    print(f"Send the messages: {messages_buf[6:].decode('utf-8')}")
+
+                if recv_data[0] == result_ms:
+                    print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}, len : {len(recv_data[6:6+num1].decode('utf-8'))}")
+                    
+                    recv_result = (recv_data[6:6+num1].decode('utf-8')).strip("\n")
+                    sp_result = split_result(recv_result, num1)
+                    print(sp_result)
+                    total_result_list.append(sp_result)
+                    
+                    if len(send_command["command"]):
+                        command = send_command["command"][0]
+                        print(command)
+                        if '$1' in command:
+                            hash_val = total_result_list[1][0] + "aaaaaaaaaaaaaaaa"
+                            print(hash_val)
+                            print("Input hash value")
+                            command = command.replace('$1', hash_val)
+
+                        clients_num = len(clients_list)
                         choice_num = random.randrange(0, clients_num)
                         command_len_type = 1
                         if len(command) >= 10:
@@ -154,11 +205,8 @@ def service_connection(key, mask):
                         data.outb += messages_buf
                         sent = sock.send(data.outb) 
                         data.outb = data.outb[sent:]
+                        del send_command["command"][0]
                         print(f"Send the messages: {messages_buf[6:].decode('utf-8')}")
-
-                if recv_data[0] == result_ms:
-                    print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
-
                 if total_len <= 0:
                     break
                 recv_data = recv_data[6+num1:]

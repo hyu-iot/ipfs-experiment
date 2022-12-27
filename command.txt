@@ -3,5 +3,6 @@
 # 2 head -c 1024000000 < /dev/urandom > test_file3
 3 head -c 102400 < /dev/urandom > test_file1
 1 time ipfs add test_file1
+1 time ipfs cat $1 > read_file1
 # 1 pwd
 # 2 pwd
