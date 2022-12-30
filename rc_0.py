@@ -146,7 +146,7 @@ def service_connection(key, mask):
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
 
                     try:
-                        outs, err = fd_popen.communicate(timeout=5)
+                        outs, err = fd_popen.communicate(timeout=1000)
                     except subprocess.TimeoutExpired:
                         fd_popen.kill()
                         outs = None

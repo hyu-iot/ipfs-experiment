@@ -15,13 +15,14 @@ hello_ms = 2
 command_rc = 3
 command_cc = 4
 command_ms = 5
-result_rc = 6
+result_default = 15
+result_rc_mf = 16
+result_rc_af = 17
 result_ms = 7
 client_info_cc = 10
 client_info_ms = 11
 add_message = 20
 bytes_num = 1024
-
 
 
 
@@ -42,6 +43,12 @@ def write_bytes(str_len):
         order += 1
     return str_buf
         
+def sub_write_bytes(sub_message):
+    str_length = str(len(sub_message)-17)
+    str_length_len = str(len(str_length))
+    
+    return str_length_len + str_length +sub_message
+
 def payload_buf_length(buffer):
     num = 0;
     for i in range(4):
@@ -129,31 +136,35 @@ def service_connection(key, mask):
 
                 if recv_data[0] == command_ms:
                     print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
-                    
+                    result_rc = result_default
                     comm_data = recv_data[6:6+num1].decode('utf-8').split(" ")
-                    # comm_data.insert(0,'time')
-                    # comm_data.insert(1,'python3')
-                    # comm_data.insert(2,execute_file)
                     comm_data.insert(0,'python3')
                     comm_data.insert(1,execute_file)
-                    comm_data.insert(2,'time')
-                    
                     print(comm_data)                
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                     fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE)
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
 
                     try:
-                        outs, err = fd_popen.communicate(timeout=15)
-                    except TimeoutError:
+                        outs, err = fd_popen.communicate(timeout=1000)
+                    except subprocess.TimeoutExpired:
                         fd_popen.kill()
-                    finally:
-                        pass
-                    if outs:
-                        comm_recv_str = outs.decode('utf-8')
-                    else:
-                        comm_recv_str = err.decode('utf-8')
+                        outs = None
+                        err = "Timeout expired"
 
+                    if outs:
+                        comm_recv_str = outs.decode('utf-8').strip("\n")
+                    else:
+                        comm_recv_str = err
+                    print(comm_recv_str)
+                    if comm_data[3] == "ipfs" and comm_data[4] == "add":
+                        result_rc = result_rc_af
+                        hash_value = comm_recv_str.split(" ")[1] + comm_recv_str.split("\n")[1]
+                        comm_recv_str = sub_write_bytes(hash_value)
+                    elif comm_data[2] == "head" and comm_data[3] == "-c":
+                        result_rc = result_rc_mf
+                        comm_recv_str = comm_recv_str
+                    
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                     io = psutil.net_io_counters()
                     bytes_sent, bytes_recv = io.bytes_sent, io.bytes_recv
