@@ -1,12 +1,27 @@
-# 1 head -c 1024000000 < /dev/urandom > test_file4
-# 3 pwd
-# 2 head -c 1024000000 < /dev/urandom > test_file3
-0 head -c 10240000 < /dev/urandom > test_file1
-0 time ipfs add test_file1
-1 time ipfs cat $1 > read_file1
-1 head -c 102400000 < /dev/urandom > test_file5
-1 time ipfs add test_file5
-0 time ipfs cat $1 > read_file5
-0 head -c 1024000000 < /dev/urandom > test_file6
-0 time ipfs add test_file6
-1 time ipfs cat $1 > read_file6
+0 head -c 102400 < /dev/urandom > test_file1
+0 ipfs add test_file1
+1 ipfs cat $1 > read_file1
+1 head -c 1048576 < /dev/urandom > test_file2
+1 ipfs add test_file2
+0 ipfs cat $1 > read_file2
+0 head -c 1048576 < /dev/urandom > test_file3
+0 ipfs add test_file3
+1 ipfs cat $1 > read_file3
+0 head -c 10485760 < /dev/urandom > test_file4
+0 ipfs add test_file4
+1 ipfs cat $1 > read_file4
+1 head -c 10485760 < /dev/urandom > test_file5
+1 ipfs add test_file5
+0 ipfs cat $1 > read_file5
+0 head -c 1048576000 < /dev/urandom > test_file6
+0 ipfs add test_file6
+1 ipfs cat $1 > read_file6
+0 head -c 10485760 < /dev/urandom > test_file7
+0 ipfs add test_file7
+1 ipfs cat $1 > read_file7
+1 head -c 524288000 < /dev/urandom > test_file8
+1 ipfs add test_file8
+0 ipfs cat $1 > read_file8
+0 head -c 10485760 < /dev/urandom > test_file9
+0 ipfs add test_file9
+1 ipfs cat $1 > read_file9

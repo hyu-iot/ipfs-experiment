@@ -58,15 +58,17 @@ print(send_command)
 
 def make_csv(dic):
     with open('result.csv', 'w', newline='') as csvfile:
-        fieldnames = ['command', 'result']
+        fieldnames = ['client_id','command', 'result']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
         for i in range(len(dic['command'])):
+            client_id_0 = dic["client_id"][i]
             command = dic['command'][i]
             result_0 = dic['result'][i]
-            print(command, result_0)
-            writer.writerow({'command': command, 'result': result_0})
+            # print(client_id, command, result_0)
+            writer.writerow({'client_id': client_id_0, 'command': command, 'result': result_0})
+
 def split_result(res, total_len):
     res_list = []
     num3 = 0
@@ -149,13 +151,15 @@ def start_connections(host, port, ip_num):
         sel.register(sock, events, data=data)
 
 clients_list = []
-total_result_list = {"command":[], "result": []}
+total_result_list = {"client_id" : [], "command":[], "result": []}
 command = ""
+choice_num = 0
 def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
     global clients_list
     global command
+    global choice_num
     if mask & selectors.EVENT_READ:
         start_time = datetime.now()
         recv_data = sock.recv(bytes_num)  # Should be ready to read
@@ -196,8 +200,10 @@ def service_connection(key, mask):
                     print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}, len : {len(recv_data[6:6+num1].decode('utf-8'))}")
                     
                     recv_result = (recv_data[6:6+num1].decode('utf-8')).strip("\n")
+                    print(recv_result)
                     sp_result = split_result(recv_result, num1)
                     print(sp_result)
+                    total_result_list["client_id"].append(clients_list[choice_num])
                     total_result_list["command"].append(command)
                     total_result_list["result"].append(sp_result)
                     print(total_result_list)
@@ -205,7 +211,7 @@ def service_connection(key, mask):
                         command = send_command["command"][0]
                         print(command)
                         if '$1' in command:
-                            hash_val = total_result_list["result"][len(total_result_list)-1][0]
+                            hash_val = sp_result[0]
                             print(hash_val)
                             print("Input hash value")
                             command = command.replace('$1', hash_val)

@@ -157,7 +157,7 @@ def service_connection(key, mask):
                     else:
                         comm_recv_str = err
                     print(comm_recv_str)
-                    if comm_data[3] == "ipfs" and comm_data[4] == "add":
+                    if comm_data[2] == "ipfs" and comm_data[3] == "add":
                         result_rc = result_rc_af
                         hash_value = comm_recv_str.split(" ")[1] + comm_recv_str.split("\n")[1]
                         comm_recv_str = sub_write_bytes(hash_value)
