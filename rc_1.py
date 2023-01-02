@@ -44,7 +44,7 @@ def write_bytes(str_len):
     return str_buf
         
 def sub_write_bytes(sub_message):
-    str_length = str(len(sub_message)-17)
+    str_length = str(len(sub_message))
     str_length_len = str(len(str_length))
     
     return str_length_len + str_length +sub_message
@@ -159,8 +159,10 @@ def service_connection(key, mask):
                     print(comm_recv_str)
                     if comm_data[2] == "ipfs" and comm_data[3] == "add":
                         result_rc = result_rc_af
-                        hash_value = comm_recv_str.split(" ")[1] + comm_recv_str.split("\n")[1]
+                        hash_value = comm_recv_str.split(" ")[1]
+                        time_value = comm_recv_str.split("\n")[1]
                         comm_recv_str = sub_write_bytes(hash_value)
+                        comm_recv_str += time_value
                     elif comm_data[2] == "head" and comm_data[3] == "-c":
                         result_rc = result_rc_mf
                         comm_recv_str = comm_recv_str

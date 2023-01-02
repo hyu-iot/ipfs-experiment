@@ -57,7 +57,7 @@ f.close()
 print(send_command)
 
 def make_csv(dic):
-    with open('result.csv', 'w', newline='') as csvfile:
+    with open('result_1.csv', 'w', newline='') as csvfile:
         fieldnames = ['client_id','command', 'result']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
