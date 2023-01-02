@@ -252,7 +252,7 @@ ip_data = pd.read_csv(sys.argv[1])
 print(ip_data["id"][0])
 port = 7001
 
-start_connections(ip_data["ip_address"][0] , port, len(ip_data))
+start_connections(ip_data["ip_address"][1] , port, len(ip_data))
 
 try:
     while True:
@@ -263,7 +263,7 @@ try:
         # Check for a socket being monitored to continue.
         if not sel.get_map():
             time.sleep(50)
-            start_connections(ip_data["ip_address"][0] , port, len(ip_data))
+            start_connections(ip_data["ip_address"][1] , port, len(ip_data))
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
 finally:

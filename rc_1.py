@@ -103,6 +103,7 @@ def start_connections(host, port, ip_num):
             sock.connect(server_addr)
         except:
             print("Connection Failed.\nLet's restart to connect to server")
+            return 0
         events = selectors.EVENT_READ | selectors.EVENT_WRITE
         messages_buf = payload_concat(hello_rc, id)
         print(messages_buf)
@@ -116,10 +117,12 @@ def start_connections(host, port, ip_num):
             outb=b"",
         )
         sel.register(sock, events, data=data)
+        return 1
 
 def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
+    global ret
     if mask & selectors.EVENT_READ:
         start_time = datetime.now()
         recv_data = sock.recv(bytes_num)  # Should be ready to read
@@ -142,7 +145,7 @@ def service_connection(key, mask):
                     comm_data.insert(1,execute_file)
                     print(comm_data)                
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
-                    fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE)
+                    fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
 
                     try:
@@ -156,16 +159,26 @@ def service_connection(key, mask):
                         comm_recv_str = outs.decode('utf-8').strip("\n")
                     else:
                         comm_recv_str = err
-                    print(comm_recv_str)
-                    if comm_data[2] == "ipfs" and comm_data[3] == "add":
+                    print(f"결과 : {comm_recv_str}")
+                    if comm_data[3] == "ipfs" and comm_data[4] == "add":
                         result_rc = result_rc_af
-                        hash_value = comm_recv_str.split(" ")[1]
-                        time_value = comm_recv_str.split("\n")[1]
-                        comm_recv_str = sub_write_bytes(hash_value)
-                        comm_recv_str += time_value
+                        recv_list = comm_recv_str.replace("\t",":").split("\n")
+                        recv_list.pop(0)
+                        comm_recv_str = ""
+                        for i in range(3):
+                            comm_recv_str += sub_write_bytes(recv_list[i])
+                        comm_recv_str += recv_list[-1]
                     elif comm_data[2] == "head" and comm_data[3] == "-c":
                         result_rc = result_rc_mf
                         comm_recv_str = comm_recv_str
+                    elif comm_data[3] == "ipfs" and comm_data[4] == "cat":
+                        result_rc = result_rc_af
+                        recv_list = comm_recv_str.replace("\t",":").split("\n")
+                        recv_list.pop(0)
+                        comm_recv_str = ""
+                        for i in range(3):
+                            comm_recv_str += sub_write_bytes(recv_list[i])
+                        comm_recv_str += recv_list[-1]
                     
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                     io = psutil.net_io_counters()
@@ -188,7 +201,7 @@ def service_connection(key, mask):
         if not recv_data or data.recv_total == data.msg_total:
             print(f"Closing connection {data.connid}")
             sel.unregister(sock)
-            # sock.close()
+            ret = 0
     if mask & selectors.EVENT_WRITE:
         if not data.outb and data.messages:
             data.outb = data.messages.pop(0)
@@ -206,17 +219,16 @@ ip_data = pd.read_csv(sys.argv[1])
 print(ip_data["id"][0])
 port = 7001
 
-start_connections(ip_data["ip_address"][0] , port, len(ip_data))
+ret = start_connections(ip_data["ip_address"][1] , port, len(ip_data))
 try:
     while True:
         events = sel.select(timeout=1)
+        if not ret:
+            time.sleep(10)
+            ret = start_connections(ip_data["ip_address"][1] , port, len(ip_data))
         if events:
             for key, mask in events:
                 service_connection(key, mask)
-        # Check for a socket being monitored to continue.
-        if not sel.get_map():
-            time.sleep(10)
-            start_connections(ip_data["ip_address"][0] , port, len(ip_data))
 
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
