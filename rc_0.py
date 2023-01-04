@@ -122,6 +122,7 @@ def start_connections(host, port, ip_num):
 def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
+    global ret
     if mask & selectors.EVENT_READ:
         start_time = datetime.now()
         recv_data = sock.recv(bytes_num)  # Should be ready to read
@@ -144,7 +145,8 @@ def service_connection(key, mask):
                     comm_data.insert(1,execute_file)
                     print(comm_data)                
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
-                    fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                    # fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                    fd_popen = subprocess.Popen(comm_data, stdout=subprocess.PIPE)
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
 
                     try:
@@ -159,25 +161,25 @@ def service_connection(key, mask):
                     else:
                         comm_recv_str = err
                     print(f"결과 : {comm_recv_str}")
-                    if comm_data[3] == "ipfs" and comm_data[4] == "add":
+                    if comm_data[2] == "ipfs" and comm_data[3] == "add":
                         result_rc = result_rc_af
-                        recv_list = comm_recv_str.replace("\t",":").split("\n")
-                        recv_list.pop(0)
-                        comm_recv_str = ""
-                        for i in range(3):
-                            comm_recv_str += sub_write_bytes(recv_list[i])
-                        comm_recv_str += recv_list[-1]
+                        # recv_list = comm_recv_str.replace("\t",":").split("\n")
+                        # recv_list.pop(0)
+                        # comm_recv_str = ""
+                        # for i in range(3):
+                        #     comm_recv_str += sub_write_bytes(recv_list[i])
+                        # comm_recv_str += recv_list[-1]
                     elif comm_data[2] == "head" and comm_data[3] == "-c":
                         result_rc = result_rc_mf
-                        comm_recv_str = comm_recv_str
-                    elif comm_data[3] == "ipfs" and comm_data[4] == "cat":
+                        # comm_recv_str = comm_recv_str
+                    elif comm_data[2] == "ipfs" and comm_data[3] == "cat":
                         result_rc = result_rc_af
-                        recv_list = comm_recv_str.replace("\t",":").split("\n")
-                        recv_list.pop(0)
-                        comm_recv_str = ""
-                        for i in range(3):
-                            comm_recv_str += sub_write_bytes(recv_list[i])
-                        comm_recv_str += recv_list[-1]
+                        # recv_list = comm_recv_str.replace("\t",":").split("\n")
+                        # recv_list.pop(0)
+                        # comm_recv_str = ""
+                        # for i in range(3):
+                        #     comm_recv_str += sub_write_bytes(recv_list[i])
+                        # comm_recv_str += recv_list[-1]
                     
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                     io = psutil.net_io_counters()
@@ -200,6 +202,7 @@ def service_connection(key, mask):
         if not recv_data or data.recv_total == data.msg_total:
             print(f"Closing connection {data.connid}")
             sel.unregister(sock)
+            ret = 0
             # sock.close()
     if mask & selectors.EVENT_WRITE:
         if not data.outb and data.messages:

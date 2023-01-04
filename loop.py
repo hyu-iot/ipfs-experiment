@@ -17,7 +17,6 @@ def sub_write_bytes(sub_message):
 
 command = sys.argv[1:]
 comm_str = ' '.join(s for s in command)
-count = 0
 start_time = datetime.now()
 fd_open = os.popen(comm_str).read()
 time_interval = datetime.now() - start_time
