@@ -22,4 +22,4 @@ fd_open = os.popen(comm_str).read()
 time_interval = datetime.now() - start_time
 if fd_open:
     fd_open = sub_write_bytes((fd_open.split(" "))[1])
-print(fd_open + sub_write_bytes(str(time_interval))+ sub_write_bytes(str(datetime.timestamp(datetime.now()))))
+print(sub_write_bytes(comm_str) + fd_open + sub_write_bytes(str(time_interval))+ sub_write_bytes(str(datetime.timestamp(datetime.now()))))

@@ -156,6 +156,9 @@ total_result_list = {"client_id" : [], "command":[], "result": []}
 command = ""
 choice_num = 0
 block_num = 0
+recv_num = 0
+send_num = 0
+blocking = 0
 def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
@@ -163,6 +166,7 @@ def service_connection(key, mask):
     global command
     global choice_num
     global block_num
+    global recv_num, send_num, blocking
     if mask & selectors.EVENT_READ:
         start_time = datetime.now()
         recv_data = sock.recv(bytes_num)  # Should be ready to read
@@ -196,9 +200,11 @@ def service_connection(key, mask):
                     sent = sock.send(data.outb) 
                     data.outb = data.outb[sent:]
                     del send_command["command"][0] , send_command["index"][0], send_command["block"][0]
+                    send_num += 1
                     print(f"Send the messages: {messages_buf[6:].decode('utf-8')}")
 
                 if recv_data[0] == result_ms:
+                    recv_num += 1
                     print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}, len : {len(recv_data[6:6+num1].decode('utf-8'))}")
                     
                     recv_result = (recv_data[6:6+num1].decode('utf-8')).strip("\n")
@@ -206,36 +212,39 @@ def service_connection(key, mask):
                     sp_result = split_result(recv_result, num1)
                     print(sp_result)
                     total_result_list["client_id"].append(sp_result[0])
-                    total_result_list["command"].append(command)
-                    total_result_list["result"].append(sp_result[1:])
+                    total_result_list["command"].append(sp_result[1])
+                    total_result_list["result"].append(sp_result[2:])
                     print(total_result_list)
-                    while len(send_command["command"]):
-                        command = send_command["command"][0]
-                        print(command)                      
-                        if ('$1' in command):
-                            if (block_num == 0):
-                                hash_val = sp_result[1]
-                                print(hash_val)
-                                print("Input hash value")
-                                command = command.replace('$1', hash_val)
-                            else:
-                                print(hash_val)
-                                print("Input hash value")
-                                command = command.replace('$1', hash_val)
+                    if ((blocking == 1) & (recv_num == send_num)) | (blocking == 0):
+                        while len(send_command["command"]):
+                            command = send_command["command"][0]
+                            blocking = int(send_command["block"][0]) 
+                            print(command)                      
+                            if ('$1' in command):
+                                if (block_num == 0):
+                                    hash_val = sp_result[2]
+                                    print(hash_val)
+                                    print("Input hash value")
+                                    command = command.replace('$1', hash_val)
+                                else:
+                                    print(hash_val)
+                                    print("Input hash value")
+                                    command = command.replace('$1', hash_val)
 
-                        clients_num = len(clients_list)
-                        choice_num = int(send_command["index"][0])
-                        command_str = sub_write_bytes(command)
-                        messages_buf = payload_concat(command_cc,str(len(clients_list[choice_num])) + clients_list[choice_num] + command_str)
-                        data.outb += messages_buf
-                        sent = sock.send(data.outb) 
-                        data.outb = data.outb[sent:]
-                        print(f"Send the messages: {messages_buf[6:].decode('utf-8')}")                            
-                        if (send_command["block"][0] == "1") & (len(send_command["command"]) != 1):    
-                            del send_command["command"][0] , send_command["index"][0], send_command["block"][0]
-                            break
-                        del send_command["command"][0] , send_command["index"][0], send_command["block"][0]                        
-                        block_num += 1
+                            clients_num = len(clients_list)
+                            choice_num = int(send_command["index"][0])
+                            command_str = sub_write_bytes(command)
+                            messages_buf = payload_concat(command_cc,str(len(clients_list[choice_num])) + clients_list[choice_num] + command_str)
+                            data.outb += messages_buf
+                            sent = sock.send(data.outb) 
+                            data.outb = data.outb[sent:]
+                            send_num += 1
+                            print(f"Send the messages: {messages_buf[6:].decode('utf-8')}")                            
+                            if (send_command["block"][0] == "1") & (len(send_command["command"]) != 1):    
+                                del send_command["command"][0] , send_command["index"][0], send_command["block"][0]
+                                break
+                            del send_command["command"][0] , send_command["index"][0], send_command["block"][0]                        
+                            block_num += 1
                     block_num = 0
                 if total_len <= 0:
                     break

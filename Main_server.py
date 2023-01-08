@@ -152,6 +152,7 @@ def service_connection(key, mask):
                         for i,j in enumerate(client_list["sock"]):
                             if sock == j:
                                 client_id = client_list["id"][i]  
+                                print(client_id)
                         sock = command_client["sock"][0]
                         data = command_client["data"][0]
                         messages_buf = payload_concat(result_ms, sub_write_bytes(client_id) + recv_data[6:6+num1].decode('utf-8'))
