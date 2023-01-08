@@ -1,0 +1,8 @@
+0 1 head -c 1024 < /dev/urandom > test_file1
+0 1 ipfs add test_file1
+1 0 ipfs cat $1 > read_file1
+0 0 ipfs cat $1 > read_file1
+0 0 head -c 1024 < /dev/urandom > test_file2
+0 1 ipfs add test_file2
+1 0 ipfs cat $1 > read_file2
+0 0 ipfs cat $1 > read_file2

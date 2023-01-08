@@ -27,6 +27,12 @@ bytes_num = 1024
 
 sel = selectors.DefaultSelector()
 
+def sub_write_bytes(sub_message):
+    str_length = str(len(sub_message))
+    str_length_len = str(len(str_length))
+    
+    return str_length_len + str_length +sub_message
+
 def write_bytes(str_len):
     str_buf = bytearray(4)
     num = str_len
@@ -125,12 +131,12 @@ def service_connection(key, mask):
                         print(client_list)
                     elif recv_data[0] == command_cc:
                         print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
-                        name_length = int(recv_data[6:7].decode('utf-8'))
-                        name = recv_data[7:7+name_length].decode('utf-8')
+                        name_length = int(recv_data[6:8].decode('utf-8'))
+                        name = recv_data[8:8+name_length].decode('utf-8')
                         print(name)
-                        command_len_type = int(recv_data[7+name_length:8+name_length].decode('utf-8'))
-                        command_length = recv_data[8+name_length:8+name_length+command_len_type].decode('utf-8')
-                        command = recv_data[8+name_length+command_len_type:6+num1].decode('utf-8')
+                        command_len_type = int(recv_data[8+name_length:9+name_length].decode('utf-8'))
+                        command_length = recv_data[9+name_length:9+name_length+command_len_type].decode('utf-8')
+                        command = recv_data[9+name_length+command_len_type:6+num1].decode('utf-8')
                         print(command)
                         for i,j in enumerate(client_list["id"]):
                             if name == j:
@@ -142,9 +148,13 @@ def service_connection(key, mask):
                                 data.outb = data.outb[sent:]
                     elif recv_data[0] == result_default or recv_data[0] == result_rc_mf or recv_data[0] == result_rc_af:
                         print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")
-                        sock = command_client["sock"][0] 
+                        client_id = ""
+                        for i,j in enumerate(client_list["sock"]):
+                            if sock == j:
+                                client_id = client_list["id"][i]  
+                        sock = command_client["sock"][0]
                         data = command_client["data"][0]
-                        messages_buf = payload_concat(result_ms, recv_data[6:6+num1].decode('utf-8'))
+                        messages_buf = payload_concat(result_ms, sub_write_bytes(client_id) + recv_data[6:6+num1].decode('utf-8'))
                         data.outb = messages_buf
                         print(f"Echoing {data.outb!r} to {data.addr}")
                         sent = sock.send(data.outb)  # Should be ready to write

@@ -40,13 +40,27 @@ import psutil
 #         print(command, result_0)
 #         writer.writerow({'command': command, 'result': result_0})
 
-fd_popen = subprocess.Popen(["python3", "Hello.py"], stdout=subprocess.PIPE)
-try:
-    outs, err = fd_popen.communicate(timeout=1000)
-except subprocess.TimeoutExpired:
-    fd_popen.kill()
-    outs = None
-    err = "Timeout expired"
+# fd_popen = subprocess.Popen(["python3", "Hello.py"], stdout=subprocess.PIPE)
+# try:
+#     outs, err = fd_popen.communicate(timeout=1000)
+# except subprocess.TimeoutExpired:
+#     fd_popen.kill()
+#     outs = None
+#     err = "Timeout expired"
 
-print(outs.decode('utf-8'))
-print("종료")
+# print(outs.decode('utf-8'))
+# print("종료")
+
+f = open(sys.argv[1], 'r')
+lines = f.readlines()
+send_command = {"index": [] , "block" :[], "command": []}
+for line in lines:
+    line_v = line.strip()
+    if line_v[0] == '#':
+        continue
+    send_command["index"].append(line_v.split('\n')[0].split(" ",maxsplit=2)[0])
+    send_command["block"].append(line_v.split('\n')[0].split(" ",maxsplit=2)[1])
+    send_command["command"].append(line_v.split('\n')[0].split(" ",maxsplit=2)[2])
+f.close()
+print(send_command)
+print(type(send_command["block"][0]))

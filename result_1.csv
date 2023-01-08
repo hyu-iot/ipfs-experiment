@@ -1,0 +1,4 @@
+client_id,command,result
+yeongbin_kr,head -c 1024 < /dev/urandom > test_file1,"['0:00:00.008782', '1673158354.500857']"
+yeongbin_kr,ipfs add test_file1,"['QmUNdqdaKFQyTUeTWeKEFsguq3FjQef2T5Emk2gzqtJMz3', '0:00:00.584027', '1673158355.601696']"
+yunsang_kr,ipfs add test_file2,"['0:00:00.236501', '1673158356.490093']"

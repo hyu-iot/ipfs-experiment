@@ -46,13 +46,14 @@ id = "command client"
 
 f = open(sys.argv[2], 'r')
 lines = f.readlines()
-send_command = {"index": [] , "command": []}
+send_command = {"index": [] , "block" :[], "command": []}
 for line in lines:
     line_v = line.strip()
     if line_v[0] == '#':
         continue
-    send_command["index"].append(line_v.split('\n')[0].split(" ",maxsplit=1)[0])
-    send_command["command"].append(line_v.split('\n')[0].split(" ",maxsplit=1)[1])
+    send_command["index"].append(line_v.split('\n')[0].split(" ",maxsplit=2)[0])
+    send_command["block"].append(line_v.split('\n')[0].split(" ",maxsplit=2)[1])
+    send_command["command"].append(line_v.split('\n')[0].split(" ",maxsplit=2)[2])
 f.close()
 print(send_command)
 
@@ -154,12 +155,14 @@ clients_list = []
 total_result_list = {"client_id" : [], "command":[], "result": []}
 command = ""
 choice_num = 0
+block_num = 0
 def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
     global clients_list
     global command
     global choice_num
+    global block_num
     if mask & selectors.EVENT_READ:
         start_time = datetime.now()
         recv_data = sock.recv(bytes_num)  # Should be ready to read
@@ -185,7 +188,6 @@ def service_connection(key, mask):
                     print(clients_list)
                     clients_num = len(clients_list)
                     print(f"client number : {clients_num}")
-                    # for command in send_command["command"]:
                     command = send_command["command"][0]
                     choice_num = int(send_command["index"][0])
                     command_str = sub_write_bytes(command)
@@ -193,7 +195,7 @@ def service_connection(key, mask):
                     data.outb += messages_buf
                     sent = sock.send(data.outb) 
                     data.outb = data.outb[sent:]
-                    del send_command["command"][0] , send_command["index"][0]
+                    del send_command["command"][0] , send_command["index"][0], send_command["block"][0]
                     print(f"Send the messages: {messages_buf[6:].decode('utf-8')}")
 
                 if recv_data[0] == result_ms:
@@ -203,18 +205,23 @@ def service_connection(key, mask):
                     print(recv_result)
                     sp_result = split_result(recv_result, num1)
                     print(sp_result)
-                    total_result_list["client_id"].append(clients_list[choice_num])
+                    total_result_list["client_id"].append(sp_result[0])
                     total_result_list["command"].append(command)
-                    total_result_list["result"].append(sp_result)
+                    total_result_list["result"].append(sp_result[1:])
                     print(total_result_list)
-                    if len(send_command["command"]):
+                    while len(send_command["command"]):
                         command = send_command["command"][0]
-                        print(command)
-                        if '$1' in command:
-                            hash_val = sp_result[0]
-                            print(hash_val)
-                            print("Input hash value")
-                            command = command.replace('$1', hash_val)
+                        print(command)                      
+                        if ('$1' in command):
+                            if (block_num == 0):
+                                hash_val = sp_result[1]
+                                print(hash_val)
+                                print("Input hash value")
+                                command = command.replace('$1', hash_val)
+                            else:
+                                print(hash_val)
+                                print("Input hash value")
+                                command = command.replace('$1', hash_val)
 
                         clients_num = len(clients_list)
                         choice_num = int(send_command["index"][0])
@@ -223,8 +230,13 @@ def service_connection(key, mask):
                         data.outb += messages_buf
                         sent = sock.send(data.outb) 
                         data.outb = data.outb[sent:]
-                        del send_command["command"][0] , send_command["index"][0]
-                        print(f"Send the messages: {messages_buf[6:].decode('utf-8')}")
+                        print(f"Send the messages: {messages_buf[6:].decode('utf-8')}")                            
+                        if (send_command["block"][0] == "1") & (len(send_command["command"]) != 1):    
+                            del send_command["command"][0] , send_command["index"][0], send_command["block"][0]
+                            break
+                        del send_command["command"][0] , send_command["index"][0], send_command["block"][0]                        
+                        block_num += 1
+                    block_num = 0
                 if total_len <= 0:
                     break
                 recv_data = recv_data[6+num1:]
@@ -252,7 +264,7 @@ ip_data = pd.read_csv(sys.argv[1])
 print(ip_data["id"][0])
 port = 7001
 
-start_connections(ip_data["ip_address"][1] , port, len(ip_data))
+start_connections(ip_data["ip_address"][0] , port, len(ip_data))
 
 try:
     while True:
@@ -263,7 +275,7 @@ try:
         # Check for a socket being monitored to continue.
         if not sel.get_map():
             time.sleep(50)
-            start_connections(ip_data["ip_address"][1] , port, len(ip_data))
+            start_connections(ip_data["ip_address"][0] , port, len(ip_data))
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
 finally:
