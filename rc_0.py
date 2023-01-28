@@ -208,13 +208,13 @@ ip_data = pd.read_csv(sys.argv[1])
 print(ip_data["id"][0])
 port = 7001
 
-ret = start_connections(ip_data["ip_address"][0] , port, len(ip_data))
+ret = start_connections(ip_data["ip_address"][1] , port, len(ip_data))
 try:
     while True:
         events = sel.select(timeout=1)
         if not ret:
             time.sleep(10)
-            ret = start_connections(ip_data["ip_address"][0] , port, len(ip_data))
+            ret = start_connections(ip_data["ip_address"][1] , port, len(ip_data))
         if events:
             for key, mask in events:
                 service_connection(key, mask)
@@ -224,4 +224,7 @@ except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
     
 finally:
+    stream = os.popen('cd ../../.ipfs/blocks/;rm -rf *')
+    stream = os.popen('cp -p SHARDING ../../.ipfs/blocks/')
+    stream = os.popen('rm -rf re*')
     sel.close()

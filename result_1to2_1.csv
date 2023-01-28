@@ -1,0 +1,113 @@
+client_id,command,Hash value,Duration of Time,Timestamp,Duration of Time(sec)
+yeongbin_us,head -c 1024 < /dev/urandom > test_file1,,0:00:00.015444,1674029067.542393,0.015444
+yeongbin_us,ipfs add test_file1,QmaaCpCtAXV1wQUsRsxPeNnKeyxKKKnwSTtgp6DWk4wAKj,0:00:00.151064,1674029069.094888,0.151064
+yeongbin_kr,ipfs cat QmaaCpCtAXV1wQUsRsxPeNnKeyxKKKnwSTtgp6DWk4wAKj > read_file1,,0:00:00.540250,1674029071.094011,0.54025
+taekyung_kr,ipfs cat QmaaCpCtAXV1wQUsRsxPeNnKeyxKKKnwSTtgp6DWk4wAKj > read_file1,,0:00:00.335009,1674029074.386091,0.335009
+yeongbin_us,head -c 1024 < /dev/urandom > test_file2,,0:00:00.017317,1674029076.052108,0.017317
+yeongbin_us,ipfs add test_file2,QmcynxRtsHAuZJ7BT7JundgThQUdQgSgHdvf8HnFHKfMLk,0:00:00.142766,1674029077.579187,0.142766
+yeongbin_kr,ipfs cat QmcynxRtsHAuZJ7BT7JundgThQUdQgSgHdvf8HnFHKfMLk > read_file2,,0:00:00.413431,1674029079.441562,0.413431
+taekyung_kr,ipfs cat QmcynxRtsHAuZJ7BT7JundgThQUdQgSgHdvf8HnFHKfMLk > read_file2,,0:00:00.347642,1674029082.765644,0.347642
+yeongbin_us,head -c 5120 < /dev/urandom > test_file3,,0:00:00.013594,1674029084.444568,0.013594
+yeongbin_us,ipfs add test_file3,QmX9Sg4cSGYM1m4Pn67RxtP3eovYbdFVzZKUAdZdGNBDcs,0:00:00.142612,1674029085.97489,0.142612
+yeongbin_kr,ipfs cat QmX9Sg4cSGYM1m4Pn67RxtP3eovYbdFVzZKUAdZdGNBDcs > read_file3,,0:00:00.417942,1674029087.84637,0.417942
+taekyung_kr,ipfs cat QmX9Sg4cSGYM1m4Pn67RxtP3eovYbdFVzZKUAdZdGNBDcs > read_file3,,0:00:00.317179,1674029091.151058,0.317179
+yeongbin_us,head -c 5120 < /dev/urandom > test_file4,,0:00:00.016185,1674029093.146888,0.016185
+yeongbin_us,ipfs add test_file4,QmVtwrFdd1rr2uFa3RjvYAnofZftFjXo7Wfnxm7adZpXEy,0:00:00.139951,1674029094.771141,0.139951
+yeongbin_kr,ipfs cat QmVtwrFdd1rr2uFa3RjvYAnofZftFjXo7Wfnxm7adZpXEy > read_file4,,0:00:00.432563,1674029097.062842,0.432563
+taekyung_kr,ipfs cat QmVtwrFdd1rr2uFa3RjvYAnofZftFjXo7Wfnxm7adZpXEy > read_file4,,0:00:00.358656,1674029100.580176,0.358656
+yeongbin_us,head -c 10240 < /dev/urandom > test_file5,,0:00:00.014595,1674029102.349326,0.014595
+yeongbin_us,ipfs add test_file5,QmcVUTZZ4pDuppvcwtZnCBqgVhZhAATKCH5XXe9DbYLYZ6,0:00:00.151064,1674029103.982304,0.151064
+yeongbin_kr,ipfs cat QmcVUTZZ4pDuppvcwtZnCBqgVhZhAATKCH5XXe9DbYLYZ6 > read_file5,,0:00:00.535064,1674029105.962519,0.535064
+taekyung_kr,ipfs cat QmcVUTZZ4pDuppvcwtZnCBqgVhZhAATKCH5XXe9DbYLYZ6 > read_file5,,0:00:00.338637,1674029109.288546,0.338637
+yeongbin_us,head -c 10240 < /dev/urandom > test_file6,,0:00:00.015994,1674029111.103663,0.015994
+yeongbin_us,ipfs add test_file6,QmPkMsPEZuBLF2fdPqFFrdBBpZe5ow38MzYBiK9uEqddV1,0:00:00.132863,1674029112.600184,0.132863
+yeongbin_kr,ipfs cat QmPkMsPEZuBLF2fdPqFFrdBBpZe5ow38MzYBiK9uEqddV1 > read_file6,,0:00:00.649863,1674029115.106356,0.649863
+taekyung_kr,ipfs cat QmPkMsPEZuBLF2fdPqFFrdBBpZe5ow38MzYBiK9uEqddV1 > read_file6,,0:00:00.355370,1674029118.504167,0.35537
+yeongbin_us,head -c 51200 < /dev/urandom > test_file7,,0:00:00.017279,1674029120.164554,0.017279
+yeongbin_us,ipfs add test_file7,QmcxUAQysKfiTTyiVQb43tN7FGWu1Skn54EfHhGyMfdxDg,0:00:00.160699,1674029121.797537,0.160699
+yeongbin_kr,ipfs cat QmcxUAQysKfiTTyiVQb43tN7FGWu1Skn54EfHhGyMfdxDg > read_file7,,0:00:00.956927,1674029124.27453,0.956927
+taekyung_kr,ipfs cat QmcxUAQysKfiTTyiVQb43tN7FGWu1Skn54EfHhGyMfdxDg > read_file7,,0:00:00.388382,1674029127.594864,0.388382
+yeongbin_us,head -c 51200 < /dev/urandom > test_file8,,0:00:00.017382,1674029129.370291,0.017382
+yeongbin_us,ipfs add test_file8,Qmek3bzX2gaJo8UQTU1ESKRmvLoxbVMF3gaMMCCapKGbhJ,0:00:00.148794,1674029130.883057,0.148794
+yeongbin_kr,ipfs cat Qmek3bzX2gaJo8UQTU1ESKRmvLoxbVMF3gaMMCCapKGbhJ > read_file8,,0:00:00.926930,1674029133.445849,0.92693
+taekyung_kr,ipfs cat Qmek3bzX2gaJo8UQTU1ESKRmvLoxbVMF3gaMMCCapKGbhJ > read_file8,,0:00:00.402507,1674029137.201901,0.402507
+yeongbin_us,head -c 102400 < /dev/urandom > test_file9,,0:00:00.017129,1674029138.850954,0.017129
+yeongbin_us,ipfs add test_file9,QmbRo369oZ7fin1uqdQVc4CzG7oNp3yBQLsdzrg12SkXo2,0:00:00.155277,1674029140.580336,0.155277
+yeongbin_kr,ipfs cat QmbRo369oZ7fin1uqdQVc4CzG7oNp3yBQLsdzrg12SkXo2 > read_file9,,0:00:01.211248,1674029143.580207,1.211248
+taekyung_kr,ipfs cat QmbRo369oZ7fin1uqdQVc4CzG7oNp3yBQLsdzrg12SkXo2 > read_file9,,0:00:00.454385,1674029147.075495,0.454385
+yeongbin_us,head -c 102400 < /dev/urandom > test_file10,,0:00:00.017065,1674029148.772885,0.017065
+yeongbin_us,ipfs add test_file10,QmWPGyu66RUuEnhx73H5UQWcDz5WJrico6nVq3e9m6StB9,0:00:00.156745,1674029150.710101,0.156745
+yeongbin_kr,ipfs cat QmWPGyu66RUuEnhx73H5UQWcDz5WJrico6nVq3e9m6StB9 > read_file10,,0:00:01.024522,1674029153.641983,1.024522
+taekyung_kr,ipfs cat QmWPGyu66RUuEnhx73H5UQWcDz5WJrico6nVq3e9m6StB9 > read_file10,,0:00:00.388053,1674029157.070261,0.388053
+yeongbin_us,head -c 512000 < /dev/urandom > test_file11,,0:00:00.032065,1674029159.173801,0.032065
+yeongbin_us,ipfs add test_file11,QmVGgAXM9oo6mQN95QUDCYkiV4Zf89aRgSj8GvN5Xo6jGn,0:00:00.178612,1674029160.812063,0.178612
+yeongbin_kr,ipfs cat QmVGgAXM9oo6mQN95QUDCYkiV4Zf89aRgSj8GvN5Xo6jGn > read_file11,,0:00:02.800632,1674029165.145288,2.800632
+taekyung_kr,ipfs cat QmVGgAXM9oo6mQN95QUDCYkiV4Zf89aRgSj8GvN5Xo6jGn > read_file11,,0:00:00.718576,1674029168.992013,0.718576
+yeongbin_us,head -c 512000 < /dev/urandom > test_file12,,0:00:00.031960,1674029170.747763,0.03196
+yeongbin_us,ipfs add test_file12,QmXZNsJd6tppMesdQtvuVevRE6PKM8A6gFL7Mf93zdgr74,0:00:00.194816,1674029172.57328,0.194816
+yeongbin_kr,ipfs cat QmXZNsJd6tppMesdQtvuVevRE6PKM8A6gFL7Mf93zdgr74 > read_file12,,0:00:01.902543,1674029176.225762,1.902543
+taekyung_kr,ipfs cat QmXZNsJd6tppMesdQtvuVevRE6PKM8A6gFL7Mf93zdgr74 > read_file12,,0:00:01.013139,1674029180.204929,1.013139
+yeongbin_us,head -c 1048576 < /dev/urandom > test_file13,,0:00:00.051495,1674029181.985772,0.051495
+yeongbin_us,ipfs add test_file13,QmcLooe2DmXGZNejtm7sJpKxGULaMDbrA1Sfo4zi93mJtM,0:00:00.240854,1674029183.695119,0.240854
+yeongbin_kr,ipfs cat QmcLooe2DmXGZNejtm7sJpKxGULaMDbrA1Sfo4zi93mJtM > read_file13,,0:00:02.829278,1674029188.004777,2.829278
+taekyung_kr,ipfs cat QmcLooe2DmXGZNejtm7sJpKxGULaMDbrA1Sfo4zi93mJtM > read_file13,,0:00:01.002681,1674029192.019408,1.002681
+yeongbin_us,head -c 1048576 < /dev/urandom > test_file14,,0:00:00.051119,1674029193.677959,0.051119
+yeongbin_us,ipfs add test_file14,QmaGGqA3x9ykkGPVX77qjjoJauZ3jHbJkwjv7ZzWzuk3ZT,0:00:00.257082,1674029195.385536,0.257082
+yeongbin_kr,ipfs cat QmaGGqA3x9ykkGPVX77qjjoJauZ3jHbJkwjv7ZzWzuk3ZT > read_file14,,0:00:02.316912,1674029199.1665,2.316912
+taekyung_kr,ipfs cat QmaGGqA3x9ykkGPVX77qjjoJauZ3jHbJkwjv7ZzWzuk3ZT > read_file14,,0:00:01.719660,1674029203.797453,1.71966
+yeongbin_us,head -c 5242880 < /dev/urandom > test_file15,,0:00:00.202406,1674029205.629686,0.202406
+yeongbin_us,ipfs add test_file15,Qma6UigbQjDRjevbP4vvNiR3A21KzL1gGT9FxBNFd84o2B,0:00:00.529432,1674029207.624366,0.529432
+yeongbin_kr,ipfs cat Qma6UigbQjDRjevbP4vvNiR3A21KzL1gGT9FxBNFd84o2B > read_file15,,0:00:09.403225,1674029218.520911,9.403225
+taekyung_kr,ipfs cat Qma6UigbQjDRjevbP4vvNiR3A21KzL1gGT9FxBNFd84o2B > read_file15,,0:00:02.096839,1674029223.575893,2.096839
+yeongbin_us,head -c 5242880 < /dev/urandom > test_file16,,0:00:00.203817,1674029225.448938,0.203817
+yeongbin_us,ipfs add test_file16,QmVeaN9inNsVwtFXdYFqj4Mnsiw1rC3jmgu1DiGG88gGRS,0:00:00.549459,1674029227.590714,0.549459
+yeongbin_kr,ipfs cat QmVeaN9inNsVwtFXdYFqj4Mnsiw1rC3jmgu1DiGG88gGRS > read_file16,,0:00:09.120945,1674029238.334205,9.120945
+taekyung_kr,ipfs cat QmVeaN9inNsVwtFXdYFqj4Mnsiw1rC3jmgu1DiGG88gGRS > read_file16,,0:00:03.153320,1674029244.581558,3.15332
+yeongbin_us,head -c 10485760 < /dev/urandom > test_file17,,0:00:00.393552,1674029246.633093,0.393552
+yeongbin_us,ipfs add test_file17,QmZLDiarLMYanHjsMjcXmpTmdsaLhkUM55AuRsqd1mm2qH,0:00:00.858585,1674029249.101748,0.858585
+yeongbin_kr,ipfs cat QmZLDiarLMYanHjsMjcXmpTmdsaLhkUM55AuRsqd1mm2qH > read_file17,,0:00:16.359430,1674029267.076568,16.35943
+taekyung_kr,ipfs cat QmZLDiarLMYanHjsMjcXmpTmdsaLhkUM55AuRsqd1mm2qH > read_file17,,0:00:04.361044,1674029274.469985,4.361044
+yeongbin_us,head -c 10485760 < /dev/urandom > test_file18,,0:00:00.390687,1674029276.524412,0.390687
+yeongbin_us,ipfs add test_file18,QmNXBMq1igPFJCskorduTxT2Awrd7QJboRLqzMTjya9auB,0:00:00.870910,1674029278.83641,0.87091
+yeongbin_kr,ipfs cat QmNXBMq1igPFJCskorduTxT2Awrd7QJboRLqzMTjya9auB > read_file18,,0:00:16.756291,1674029297.164253,16.756291
+taekyung_kr,ipfs cat QmNXBMq1igPFJCskorduTxT2Awrd7QJboRLqzMTjya9auB > read_file18,,0:00:07.069701,1674029307.279306,7.069701
+yeongbin_us,head -c 26214400 < /dev/urandom > test_file19,,0:00:00.986910,1674029309.914782,0.98691
+yeongbin_us,ipfs add test_file19,QmaBAgkhNiUeRhjgDcq8QggkU1V4bwrGZosDSszGvwVnNM,0:00:01.917620,1674029313.244332,1.91762
+yeongbin_kr,ipfs cat QmaBAgkhNiUeRhjgDcq8QggkU1V4bwrGZosDSszGvwVnNM > read_file19,,0:00:39.631071,1674029354.456297,39.631071
+taekyung_kr,ipfs cat QmaBAgkhNiUeRhjgDcq8QggkU1V4bwrGZosDSszGvwVnNM > read_file19,,0:00:12.123122,1674029369.506065,12.123122
+yeongbin_us,head -c 26214400 < /dev/urandom > test_file20,,0:00:00.958024,1674029372.102602,0.958024
+yeongbin_us,ipfs add test_file20,QmathBMA9PHQp2V6JzXa4bfZJtpNagpKwAYnopABZqEHxL,0:00:02.548724,1674029376.07981,2.548724
+yeongbin_kr,ipfs cat QmathBMA9PHQp2V6JzXa4bfZJtpNagpKwAYnopABZqEHxL > read_file20,,0:00:39.594088,1674029417.18415,39.594088
+taekyung_kr,ipfs cat QmathBMA9PHQp2V6JzXa4bfZJtpNagpKwAYnopABZqEHxL > read_file20,,0:00:10.335542,1674029430.536326,10.335542
+yeongbin_us,head -c 52428800 < /dev/urandom > test_file21,,0:00:01.895952,1674029434.130224,1.895952
+yeongbin_us,ipfs add test_file21,QmSRFz8XAAyL58hhnWqVU8R7FeSZDYr4VSqxXbjqjRXwLC,0:00:04.138733,1674029439.673675,4.138733
+yeongbin_kr,ipfs cat QmSRFz8XAAyL58hhnWqVU8R7FeSZDYr4VSqxXbjqjRXwLC > read_file21,,0:01:19.434885,1674029520.727044,79.43488500000001
+taekyung_kr,ipfs cat QmSRFz8XAAyL58hhnWqVU8R7FeSZDYr4VSqxXbjqjRXwLC > read_file21,,0:00:18.375081,1674029542.100478,18.375081
+yeongbin_us,head -c 52428800 < /dev/urandom > test_file22,,0:00:01.893041,1674029545.72431,1.893041
+yeongbin_us,ipfs add test_file22,QmPywxrdMAsBhkN17wmxxxSzV6aEBzvFBod5BFopqwmxen,0:00:04.298862,1674029551.431448,4.298862
+yeongbin_kr,ipfs cat QmPywxrdMAsBhkN17wmxxxSzV6aEBzvFBod5BFopqwmxen > read_file22,,0:01:18.846472,1674029631.954038,78.846472
+taekyung_kr,ipfs cat QmPywxrdMAsBhkN17wmxxxSzV6aEBzvFBod5BFopqwmxen > read_file22,,0:00:16.399085,1674029651.323884,16.399085
+yeongbin_us,head -c 78643200 < /dev/urandom > test_file23,,0:00:02.841702,1674029655.773953,2.841702
+yeongbin_us,ipfs add test_file23,QmbWYqZsp16Nu6uxZCxXX89HKqUj7JZ1B2B5zHQE3skJgW,0:00:05.503855,1674029662.683387,5.503855
+yeongbin_kr,ipfs cat QmbWYqZsp16Nu6uxZCxXX89HKqUj7JZ1B2B5zHQE3skJgW > read_file23,,0:01:59.190768,1674029783.510303,119.19076799999999
+taekyung_kr,ipfs cat QmbWYqZsp16Nu6uxZCxXX89HKqUj7JZ1B2B5zHQE3skJgW > read_file23,,0:00:24.288364,1674029810.800985,24.288364
+yeongbin_us,head -c 78643200 < /dev/urandom > test_file24,,0:00:02.855234,1674029815.2927,2.855234
+yeongbin_us,ipfs add test_file24,QmfYxZvG2wwWQ7Tw2EkDmy5zeBiNRc8MNqpYTyY6oMfPiy,0:00:04.994069,1674029821.859588,4.994069
+yeongbin_kr,ipfs cat QmfYxZvG2wwWQ7Tw2EkDmy5zeBiNRc8MNqpYTyY6oMfPiy > read_file24,,0:01:58.796117,1674029942.153399,118.79611700000001
+taekyung_kr,ipfs cat QmfYxZvG2wwWQ7Tw2EkDmy5zeBiNRc8MNqpYTyY6oMfPiy > read_file24,,0:00:28.639743,1674029973.865695,28.639743
+yeongbin_us,head -c 104857600 < /dev/urandom > test_file25,,0:00:03.779782,1674029979.312766,3.779782
+yeongbin_us,ipfs add test_file25,QmUbwiMeJudvLoJDP1TaFtDDMuoJboyE9G44f28xfcNfex,0:00:09.267712,1674029990.034785,9.267712
+yeongbin_kr,ipfs cat QmUbwiMeJudvLoJDP1TaFtDDMuoJboyE9G44f28xfcNfex > read_file25,,0:02:36.130540,1674030147.636657,156.13054
+taekyung_kr,ipfs cat QmUbwiMeJudvLoJDP1TaFtDDMuoJboyE9G44f28xfcNfex > read_file25,,0:00:30.375652,1674030181.093909,30.375652
+yeongbin_us,head -c 104857600 < /dev/urandom > test_file26,,0:00:03.755104,1674030186.50019,3.755104
+yeongbin_us,ipfs add test_file26,QmYEHqoDtEnQLSqtFDBDb7JK3nnhBQa3aaoeTj4CPzh3AV,0:00:09.080281,1674030197.095037,9.080281
+yeongbin_kr,ipfs cat QmYEHqoDtEnQLSqtFDBDb7JK3nnhBQa3aaoeTj4CPzh3AV > read_file26,,0:02:36.393871,1674030354.959697,156.393871
+taekyung_kr,ipfs cat QmYEHqoDtEnQLSqtFDBDb7JK3nnhBQa3aaoeTj4CPzh3AV > read_file26,,0:00:39.244152,1674030397.243592,39.244152
+yeongbin_us,head -c 262144000 < /dev/urandom > test_file27,,0:00:05.811959,1674030404.962637,5.811959
+yeongbin_us,ipfs add test_file27,QmTDPF5BneRWz8e8XaiKsmTXgb8p1FHJ5kSa2s2c8mwuFf,0:00:17.291293,1674030426.140501,17.291293
+yeongbin_kr,ipfs cat QmTDPF5BneRWz8e8XaiKsmTXgb8p1FHJ5kSa2s2c8mwuFf > read_file27,,0:06:36.776067,1674030824.400565,396.776067
+taekyung_kr,ipfs cat QmTDPF5BneRWz8e8XaiKsmTXgb8p1FHJ5kSa2s2c8mwuFf > read_file27,,0:01:24.993598,1674030912.48545,84.99359799999999
+yeongbin_us,head -c 262144000 < /dev/urandom > test_file28,,0:00:09.589448,1674030923.826576,9.589448
+yeongbin_us,ipfs add test_file28,QmRwnxgfVVvwGQ55EhZGuCSsyGYeeBk8pkhYxcJHuWRkdF,0:00:21.875150,1674030947.168989,21.87515
+yeongbin_kr,ipfs cat QmRwnxgfVVvwGQ55EhZGuCSsyGYeeBk8pkhYxcJHuWRkdF > read_file28,,0:06:36.051695,1674031344.793371,396.051695
+taekyung_kr,ipfs cat QmRwnxgfVVvwGQ55EhZGuCSsyGYeeBk8pkhYxcJHuWRkdF > read_file28,,0:01:32.776747,1674031440.592067,92.776747

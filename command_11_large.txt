@@ -1,84 +1,84 @@
-0 1 head -c 262144000 < /dev/urandom > test_file1
+0 1 head -c 1024 < /dev/urandom > test_file1
 0 1 ipfs add test_file1
 1 1 ipfs cat $1 > read_file1
-0 1 head -c 262144000 < /dev/urandom > test_file2
+0 1 head -c 1024 < /dev/urandom > test_file2
 0 1 ipfs add test_file2
 1 1 ipfs cat $1 > read_file2
-0 1 head -c 104857600 < /dev/urandom > test_file3
+0 1 head -c 5120 < /dev/urandom > test_file3
 0 1 ipfs add test_file3
 1 1 ipfs cat $1 > read_file3
-0 1 head -c 104857600 < /dev/urandom > test_file4
+0 1 head -c 5120 < /dev/urandom > test_file4
 0 1 ipfs add test_file4
 1 1 ipfs cat $1 > read_file4
-0 1 head -c 78643200 < /dev/urandom > test_file5
+0 1 head -c 10240 < /dev/urandom > test_file5
 0 1 ipfs add test_file5
 1 1 ipfs cat $1 > read_file5
-0 1 head -c 78643200 < /dev/urandom > test_file6
+0 1 head -c 10240 < /dev/urandom > test_file6
 0 1 ipfs add test_file6
 1 1 ipfs cat $1 > read_file6
-0 1 head -c 52428800 < /dev/urandom > test_file7
+0 1 head -c 51200 < /dev/urandom > test_file7
 0 1 ipfs add test_file7
 1 1 ipfs cat $1 > read_file7
-0 1 head -c 52428800 < /dev/urandom > test_file8
+0 1 head -c 51200 < /dev/urandom > test_file8
 0 1 ipfs add test_file8
 1 1 ipfs cat $1 > read_file8
-0 1 head -c 26214400 < /dev/urandom > test_file9
+0 1 head -c 102400 < /dev/urandom > test_file9
 0 1 ipfs add test_file9
 1 1 ipfs cat $1 > read_file9
-0 1 head -c 26214400 < /dev/urandom > test_file10
+0 1 head -c 102400 < /dev/urandom > test_file10
 0 1 ipfs add test_file10
 1 1 ipfs cat $1 > read_file10
-0 1 head -c 10485760 < /dev/urandom > test_file11
+0 1 head -c 512000 < /dev/urandom > test_file11
 0 1 ipfs add test_file11
 1 1 ipfs cat $1 > read_file11
-0 1 head -c 10485760 < /dev/urandom > test_file12
+0 1 head -c 512000 < /dev/urandom > test_file12
 0 1 ipfs add test_file12
 1 1 ipfs cat $1 > read_file12
-0 1 head -c 5242880 < /dev/urandom > test_file13
+0 1 head -c 1048576 < /dev/urandom > test_file13
 0 1 ipfs add test_file13
 1 1 ipfs cat $1 > read_file13
-0 1 head -c 5242880 < /dev/urandom > test_file14
+0 1 head -c 1048576 < /dev/urandom > test_file14
 0 1 ipfs add test_file14
 1 1 ipfs cat $1 > read_file14
-0 1 head -c 1048576 < /dev/urandom > test_file15
+0 1 head -c 5242880 < /dev/urandom > test_file15
 0 1 ipfs add test_file15
 1 1 ipfs cat $1 > read_file15
-0 1 head -c 1048576 < /dev/urandom > test_file16
+0 1 head -c 5242880 < /dev/urandom > test_file16
 0 1 ipfs add test_file16
 1 1 ipfs cat $1 > read_file16
-0 1 head -c 512000 < /dev/urandom > test_file17
+0 1 head -c 10485760 < /dev/urandom > test_file17
 0 1 ipfs add test_file17
 1 1 ipfs cat $1 > read_file17
-0 1 head -c 512000 < /dev/urandom > test_file18
+0 1 head -c 10485760 < /dev/urandom > test_file18
 0 1 ipfs add test_file18
 1 1 ipfs cat $1 > read_file18
-0 1 head -c 102400 < /dev/urandom > test_file19
+0 1 head -c 26214400 < /dev/urandom > test_file19
 0 1 ipfs add test_file19
 1 1 ipfs cat $1 > read_file19
-0 1 head -c 102400 < /dev/urandom > test_file20
+0 1 head -c 26214400 < /dev/urandom > test_file20
 0 1 ipfs add test_file20
 1 1 ipfs cat $1 > read_file20
-0 1 head -c 51200 < /dev/urandom > test_file21
+0 1 head -c 52428800 < /dev/urandom > test_file21
 0 1 ipfs add test_file21
 1 1 ipfs cat $1 > read_file21
-0 1 head -c 51200 < /dev/urandom > test_file22
+0 1 head -c 52428800 < /dev/urandom > test_file22
 0 1 ipfs add test_file22
 1 1 ipfs cat $1 > read_file22
-0 1 head -c 10240 < /dev/urandom > test_file23
+0 1 head -c 78643200 < /dev/urandom > test_file23
 0 1 ipfs add test_file23
 1 1 ipfs cat $1 > read_file23
-0 1 head -c 10240 < /dev/urandom > test_file24
+0 1 head -c 78643200 < /dev/urandom > test_file24
 0 1 ipfs add test_file24
 1 1 ipfs cat $1 > read_file24
-0 1 head -c 5120 < /dev/urandom > test_file25
+0 1 head -c 104857600 < /dev/urandom > test_file25
 0 1 ipfs add test_file25
 1 1 ipfs cat $1 > read_file25
-0 1 head -c 5120 < /dev/urandom > test_file26
+0 1 head -c 104857600 < /dev/urandom > test_file26
 0 1 ipfs add test_file26
 1 1 ipfs cat $1 > read_file26
-0 1 head -c 1024 < /dev/urandom > test_file27
+0 1 head -c 262144000 < /dev/urandom > test_file27
 0 1 ipfs add test_file27
 1 1 ipfs cat $1 > read_file27
-0 1 head -c 1024 < /dev/urandom > test_file28
+0 1 head -c 262144000 < /dev/urandom > test_file28
 0 1 ipfs add test_file28
 1 1 ipfs cat $1 > read_file28

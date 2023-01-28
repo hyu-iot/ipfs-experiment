@@ -46,10 +46,12 @@ def write_bytes(str_len):
     return str_buf
         
 def payload_buf_length(buffer):
-    num = 0;
-    for i in range(4):
-        num |= buffer[i] << 8*(3-i) 
-
+    num = 0
+    try:
+        for i in range(4):
+            num |= buffer[i] << 8*(3-i) 
+    except:
+        num = 0
     return num
 
 def payload_concat(msg_type, msg):
@@ -92,7 +94,8 @@ def service_connection(key, mask):
                     break
                 num1 = payload_buf_length(recv_data[2:6])
                 print(f"total {total_len}, num {num1+6}")
-                
+                if num1 == 0:
+                    break
                 total_len -= (num1 + 6)
                 if payload_max_num == 1:
                     sock = command_client["sock"][0] 
@@ -117,9 +120,10 @@ def service_connection(key, mask):
                         for j,k in enumerate(client_list["id"]):
                             if k == name:
                                 print(f"Received 'Hello message' from client {name}")
-                                del client_list["data"][j], client_list["sock"][j]
-                                client_list["data"].append(data)
-                                client_list["sock"].append(sock)
+                                # del client_list["data"][j], client_list["sock"][j]
+                                client_list["data"][k] = data
+                                client_list["sock"][k] = sock
+                                client_list["id"] = name
                                 reply_block = 1
                                 break
                         if reply_block == 1:
@@ -202,7 +206,7 @@ def service_connection(key, mask):
 #     print(f"Usage: {sys.argv[0]} <host> <port>")
 #     sys.exit(1)
 port = 7001
-host, port = 'localhost', port
+host, port = '0.0.0.0', port
 lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 lsock.bind((host, port))
 lsock.listen()

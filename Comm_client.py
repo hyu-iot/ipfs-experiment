@@ -10,7 +10,7 @@ from datetime import datetime
 import psutil
 import random
 import csv
-
+from ast import literal_eval
 
 hello_rc = 0
 hello_cc = 1
@@ -57,6 +57,10 @@ for line in lines:
 f.close()
 print(send_command)
 
+def str2sec(x):
+    h, m, s = x.strip().split(':') 
+    return float(h)*3600 + float(m)*60 + float(s) #int() 
+
 def make_csv(dic):
     with open('result_1.csv', 'w', newline='') as csvfile:
         fieldnames = ['client_id','command', 'result']
@@ -69,6 +73,24 @@ def make_csv(dic):
             result_0 = dic['result'][i]
             # print(client_id, command, result_0)
             writer.writerow({'client_id': client_id_0, 'command': command, 'result': result_0})
+    kr_ = pd.read_csv("result_1.csv", converters={"result": literal_eval})
+    kr_["Duration of Time"] = ''
+    kr_["Timestamp"] = 0
+    kr_["Duration of Time(sec)"] = ''
+    for i,j in enumerate(kr_["command"]):
+        if j[:8] == "ipfs add":
+            kr_["Duration of Time"][i] = kr_["result"][i][1]
+            kr_["Timestamp"][i] = kr_["result"][i][2]
+            kr_["Duration of Time(sec)"][i] = str2sec(kr_["result"][i][1])
+            kr_["result"][i] = kr_["result"][i][0]
+        else:
+            kr_["Duration of Time"][i] = kr_["result"][i][0]
+            kr_["Timestamp"][i] = kr_["result"][i][1]
+            kr_["Duration of Time(sec)"][i] = str2sec(kr_["result"][i][0])
+            kr_["result"][i] = None
+    kr_.columns.values[2] = "Hash value"
+    kr_.to_csv('result_1.csv',index=False)
+   
 
 def split_result(res, total_len):
     res_list = []
@@ -159,6 +181,8 @@ block_num = 0
 recv_num = 0
 send_num = 0
 blocking = 0
+reply_num = 0
+hash_val = ''
 def service_connection(key, mask):
     sock = key.fileobj
     data = key.data
@@ -166,7 +190,8 @@ def service_connection(key, mask):
     global command
     global choice_num
     global block_num
-    global recv_num, send_num, blocking
+    global recv_num, send_num, blocking, reply_num
+    global hash_val
     if mask & selectors.EVENT_READ:
         start_time = datetime.now()
         recv_data = sock.recv(bytes_num)  # Should be ready to read
@@ -219,9 +244,11 @@ def service_connection(key, mask):
                         while len(send_command["command"]):
                             command = send_command["command"][0]
                             blocking = int(send_command["block"][0]) 
-                            print(command)                      
+                            print(command)  
+                            if ('add' in command):
+                                reply_num = 0                    
                             if ('$1' in command):
-                                if (block_num == 0):
+                                if (block_num == 0 | reply_num == 0):
                                     hash_val = sp_result[2]
                                     print(hash_val)
                                     print("Input hash value")
@@ -230,7 +257,7 @@ def service_connection(key, mask):
                                     print(hash_val)
                                     print("Input hash value")
                                     command = command.replace('$1', hash_val)
-
+                                reply_num += 1
                             clients_num = len(clients_list)
                             choice_num = int(send_command["index"][0])
                             command_str = sub_write_bytes(command)
@@ -273,7 +300,7 @@ ip_data = pd.read_csv(sys.argv[1])
 print(ip_data["id"][0])
 port = 7001
 
-start_connections(ip_data["ip_address"][0] , port, len(ip_data))
+start_connections(ip_data["ip_address"][1] , port, len(ip_data))
 
 try:
     while True:
@@ -284,7 +311,7 @@ try:
         # Check for a socket being monitored to continue.
         if not sel.get_map():
             time.sleep(50)
-            start_connections(ip_data["ip_address"][0] , port, len(ip_data))
+            start_connections(ip_data["ip_address"][1] , port, len(ip_data))
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
 finally:

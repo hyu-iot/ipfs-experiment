@@ -28,7 +28,7 @@ bytes_num = 1024
 
 sel = selectors.DefaultSelector()
 
-id = "yunsang_kr"
+id = "hokeunkim_us"
 execute_file = "loop.py" 
 
 def write_bytes(str_len):
@@ -163,23 +163,10 @@ def service_connection(key, mask):
                     print(f"결과 : {comm_recv_str}")
                     if comm_data[2] == "ipfs" and comm_data[3] == "add":
                         result_rc = result_rc_af
-                        # recv_list = comm_recv_str.replace("\t",":").split("\n")
-                        # recv_list.pop(0)
-                        # comm_recv_str = ""
-                        # for i in range(3):
-                        #     comm_recv_str += sub_write_bytes(recv_list[i])
-                        # comm_recv_str += recv_list[-1]
                     elif comm_data[2] == "head" and comm_data[3] == "-c":
                         result_rc = result_rc_mf
-                        # comm_recv_str = comm_recv_str
                     elif comm_data[2] == "ipfs" and comm_data[3] == "cat":
                         result_rc = result_rc_af
-                        # recv_list = comm_recv_str.replace("\t",":").split("\n")
-                        # recv_list.pop(0)
-                        # comm_recv_str = ""
-                        # for i in range(3):
-                        #     comm_recv_str += sub_write_bytes(recv_list[i])
-                        # comm_recv_str += recv_list[-1]
                     
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
                     io = psutil.net_io_counters()
@@ -221,13 +208,13 @@ ip_data = pd.read_csv(sys.argv[1])
 print(ip_data["id"][0])
 port = 7001
 
-ret = start_connections(ip_data["ip_address"][0] , port, len(ip_data))
+ret = start_connections(ip_data["ip_address"][1] , port, len(ip_data))
 try:
     while True:
         events = sel.select(timeout=1)
         if not ret:
             time.sleep(10)
-            ret = start_connections(ip_data["ip_address"][0] , port, len(ip_data))
+            ret = start_connections(ip_data["ip_address"][1] , port, len(ip_data))
         if events:
             for key, mask in events:
                 service_connection(key, mask)
