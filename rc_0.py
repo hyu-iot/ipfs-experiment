@@ -150,11 +150,11 @@ def service_connection(key, mask):
                     cpu_usage, memory_usage = _check_usage_of_cpu_and_memory()
 
                     try:
-                        outs, err = fd_popen.communicate(timeout=1000)
+                        outs, err = fd_popen.communicate(timeout=30)
                     except subprocess.TimeoutExpired:
                         fd_popen.kill()
                         outs = None
-                        err = "Timeout expired"
+                        err = sub_write_bytes("Timeout expired")
 
                     if outs:
                         comm_recv_str = outs.decode('utf-8').strip("\n")
@@ -224,7 +224,4 @@ except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
     
 finally:
-    stream = os.popen('cd ../../.ipfs/blocks/;rm -rf *')
-    stream = os.popen('cp -p SHARDING ../../.ipfs/blocks/')
-    stream = os.popen('rm -rf re*')
     sel.close()

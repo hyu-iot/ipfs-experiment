@@ -119,11 +119,10 @@ def service_connection(key, mask):
                         reply_block = 0
                         for j,k in enumerate(client_list["id"]):
                             if k == name:
-                                print(f"Received 'Hello message' from client {name}")
+                                print(f"Received 'Reply Hello message' from client {name}")
                                 # del client_list["data"][j], client_list["sock"][j]
-                                client_list["data"][k] = data
-                                client_list["sock"][k] = sock
-                                client_list["id"] = name
+                                client_list["data"][j] = data
+                                client_list["sock"][j] = sock
                                 reply_block = 1
                                 break
                         if reply_block == 1:
@@ -132,6 +131,9 @@ def service_connection(key, mask):
                             client_list["sock"].append(sock)
                             client_list["id"].append(name)
                             client_list["data"].append(data)
+                        print(client_list)
+                        print(client_list)
+                        print(client_list)
                         print(client_list)
                     elif recv_data[0] == command_cc:
                         print(f"Receive the message: {recv_data[6:6+num1].decode('utf-8')}")

@@ -1,0 +1,5 @@
+client_id,command,Hash value,Duration of Time,Timestamp,Duration of Time(sec)
+byungkeun_us,head -c 10000000 < /dev/urandom > test_file1,,0:00:00.415966,1675172308.249771,0.415966
+byungkeun_us,ipfs add test_file1,QmZj61qKgyUhbUWr1wpoTLuVUUn8t7kY7vPwzFfhTDC5HZ,0:00:01.419476,1675172311.173582,1.419476
+hokeunkim_kr,ipfs cat QmZj61qKgyUhbUWr1wpoTLuVUUn8t7kY7vPwzFfhTDC5HZ > read_file1,,0:00:09.143705,1675172321.815297,9.143705
+yeongbin_kr,Timeout expired,,,,

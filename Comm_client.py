@@ -83,6 +83,11 @@ def make_csv(dic):
             kr_["Timestamp"][i] = kr_["result"][i][2]
             kr_["Duration of Time(sec)"][i] = str2sec(kr_["result"][i][1])
             kr_["result"][i] = kr_["result"][i][0]
+        elif j == "Timeout expired":
+            kr_["Duration of Time"][i] = None
+            kr_["Timestamp"][i] = None
+            kr_["Duration of Time(sec)"][i] = None
+            kr_["result"][i] = None
         else:
             kr_["Duration of Time"][i] = kr_["result"][i][0]
             kr_["Timestamp"][i] = kr_["result"][i][1]
