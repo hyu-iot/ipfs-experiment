@@ -1,600 +1,360 @@
 0 1 head -c 10000000 < /dev/urandom > test_file1
 0 1 ipfs add test_file1
 1 1 ipfs cat $1 > read_file1
-2 1 ipfs cat $1 > read_file1
-3 1 ipfs cat $1 > read_file1
 0 1 head -c 10000000 < /dev/urandom > test_file2
 0 1 ipfs add test_file2
-2 1 ipfs cat $1 > read_file2
 1 1 ipfs cat $1 > read_file2
-3 1 ipfs cat $1 > read_file2
 0 1 head -c 10000000 < /dev/urandom > test_file3
 0 1 ipfs add test_file3
 1 1 ipfs cat $1 > read_file3
-2 1 ipfs cat $1 > read_file3
-3 1 ipfs cat $1 > read_file3
 0 1 head -c 10000000 < /dev/urandom > test_file4
 0 1 ipfs add test_file4
-2 1 ipfs cat $1 > read_file4
 1 1 ipfs cat $1 > read_file4
-3 1 ipfs cat $1 > read_file4
 0 1 head -c 10000000 < /dev/urandom > test_file5
 0 1 ipfs add test_file5
 1 1 ipfs cat $1 > read_file5
-2 1 ipfs cat $1 > read_file5
-3 1 ipfs cat $1 > read_file5
 0 1 head -c 10000000 < /dev/urandom > test_file6
 0 1 ipfs add test_file6
-2 1 ipfs cat $1 > read_file6
 1 1 ipfs cat $1 > read_file6
-3 1 ipfs cat $1 > read_file6
 0 1 head -c 10000000 < /dev/urandom > test_file7
 0 1 ipfs add test_file7
 1 1 ipfs cat $1 > read_file7
-2 1 ipfs cat $1 > read_file7
-3 1 ipfs cat $1 > read_file7
 0 1 head -c 10000000 < /dev/urandom > test_file8
 0 1 ipfs add test_file8
-2 1 ipfs cat $1 > read_file8
 1 1 ipfs cat $1 > read_file8
-3 1 ipfs cat $1 > read_file8
 0 1 head -c 10000000 < /dev/urandom > test_file9
 0 1 ipfs add test_file9
 1 1 ipfs cat $1 > read_file9
-2 1 ipfs cat $1 > read_file9
-3 1 ipfs cat $1 > read_file9
 0 1 head -c 10000000 < /dev/urandom > test_file10
 0 1 ipfs add test_file10
-2 1 ipfs cat $1 > read_file10
 1 1 ipfs cat $1 > read_file10
-3 1 ipfs cat $1 > read_file10
 0 1 head -c 10000000 < /dev/urandom > test_file11
 0 1 ipfs add test_file11
 1 1 ipfs cat $1 > read_file11
-2 1 ipfs cat $1 > read_file11
-3 1 ipfs cat $1 > read_file11
 0 1 head -c 10000000 < /dev/urandom > test_file12
 0 1 ipfs add test_file12
-2 1 ipfs cat $1 > read_file12
 1 1 ipfs cat $1 > read_file12
-3 1 ipfs cat $1 > read_file12
 0 1 head -c 10000000 < /dev/urandom > test_file13
 0 1 ipfs add test_file13
 1 1 ipfs cat $1 > read_file13
-2 1 ipfs cat $1 > read_file13
-3 1 ipfs cat $1 > read_file13
 0 1 head -c 10000000 < /dev/urandom > test_file14
 0 1 ipfs add test_file14
-2 1 ipfs cat $1 > read_file14
 1 1 ipfs cat $1 > read_file14
-3 1 ipfs cat $1 > read_file14
 0 1 head -c 10000000 < /dev/urandom > test_file15
 0 1 ipfs add test_file15
 1 1 ipfs cat $1 > read_file15
-2 1 ipfs cat $1 > read_file15
-3 1 ipfs cat $1 > read_file15
 0 1 head -c 10000000 < /dev/urandom > test_file16
 0 1 ipfs add test_file16
-2 1 ipfs cat $1 > read_file16
 1 1 ipfs cat $1 > read_file16
-3 1 ipfs cat $1 > read_file16
 0 1 head -c 10000000 < /dev/urandom > test_file17
 0 1 ipfs add test_file17
 1 1 ipfs cat $1 > read_file17
-2 1 ipfs cat $1 > read_file17
-3 1 ipfs cat $1 > read_file17
 0 1 head -c 10000000 < /dev/urandom > test_file18
 0 1 ipfs add test_file18
-2 1 ipfs cat $1 > read_file18
 1 1 ipfs cat $1 > read_file18
-3 1 ipfs cat $1 > read_file18
 0 1 head -c 10000000 < /dev/urandom > test_file19
 0 1 ipfs add test_file19
 1 1 ipfs cat $1 > read_file19
-2 1 ipfs cat $1 > read_file19
-3 1 ipfs cat $1 > read_file19
 0 1 head -c 10000000 < /dev/urandom > test_file20
 0 1 ipfs add test_file20
-2 1 ipfs cat $1 > read_file20
 1 1 ipfs cat $1 > read_file20
-3 1 ipfs cat $1 > read_file20
 0 1 head -c 10000000 < /dev/urandom > test_file21
 0 1 ipfs add test_file21
 1 1 ipfs cat $1 > read_file21
-2 1 ipfs cat $1 > read_file21
-3 1 ipfs cat $1 > read_file21
 0 1 head -c 10000000 < /dev/urandom > test_file22
 0 1 ipfs add test_file22
-2 1 ipfs cat $1 > read_file22
 1 1 ipfs cat $1 > read_file22
-3 1 ipfs cat $1 > read_file22
 0 1 head -c 10000000 < /dev/urandom > test_file23
 0 1 ipfs add test_file23
 1 1 ipfs cat $1 > read_file23
-2 1 ipfs cat $1 > read_file23
-3 1 ipfs cat $1 > read_file23
 0 1 head -c 10000000 < /dev/urandom > test_file24
 0 1 ipfs add test_file24
-2 1 ipfs cat $1 > read_file24
 1 1 ipfs cat $1 > read_file24
-3 1 ipfs cat $1 > read_file24
 0 1 head -c 10000000 < /dev/urandom > test_file25
 0 1 ipfs add test_file25
 1 1 ipfs cat $1 > read_file25
-2 1 ipfs cat $1 > read_file25
-3 1 ipfs cat $1 > read_file25
 0 1 head -c 10000000 < /dev/urandom > test_file26
 0 1 ipfs add test_file26
-2 1 ipfs cat $1 > read_file26
 1 1 ipfs cat $1 > read_file26
-3 1 ipfs cat $1 > read_file26
 0 1 head -c 10000000 < /dev/urandom > test_file27
 0 1 ipfs add test_file27
 1 1 ipfs cat $1 > read_file27
-2 1 ipfs cat $1 > read_file27
-3 1 ipfs cat $1 > read_file27
 0 1 head -c 10000000 < /dev/urandom > test_file28
 0 1 ipfs add test_file28
-2 1 ipfs cat $1 > read_file28
 1 1 ipfs cat $1 > read_file28
-3 1 ipfs cat $1 > read_file28
 0 1 head -c 10000000 < /dev/urandom > test_file29
 0 1 ipfs add test_file29
 1 1 ipfs cat $1 > read_file29
-2 1 ipfs cat $1 > read_file29
-3 1 ipfs cat $1 > read_file29
 0 1 head -c 10000000 < /dev/urandom > test_file30
 0 1 ipfs add test_file30
-2 1 ipfs cat $1 > read_file30
 1 1 ipfs cat $1 > read_file30
-3 1 ipfs cat $1 > read_file30
 0 1 head -c 10000000 < /dev/urandom > test_file31
 0 1 ipfs add test_file31
 1 1 ipfs cat $1 > read_file31
-2 1 ipfs cat $1 > read_file31
-3 1 ipfs cat $1 > read_file31
 0 1 head -c 10000000 < /dev/urandom > test_file32
 0 1 ipfs add test_file32
-2 1 ipfs cat $1 > read_file32
 1 1 ipfs cat $1 > read_file32
-3 1 ipfs cat $1 > read_file32
 0 1 head -c 10000000 < /dev/urandom > test_file33
 0 1 ipfs add test_file33
 1 1 ipfs cat $1 > read_file33
-2 1 ipfs cat $1 > read_file33
-3 1 ipfs cat $1 > read_file33
 0 1 head -c 10000000 < /dev/urandom > test_file34
 0 1 ipfs add test_file34
-2 1 ipfs cat $1 > read_file34
 1 1 ipfs cat $1 > read_file34
-3 1 ipfs cat $1 > read_file34
 0 1 head -c 10000000 < /dev/urandom > test_file35
 0 1 ipfs add test_file35
 1 1 ipfs cat $1 > read_file35
-2 1 ipfs cat $1 > read_file35
-3 1 ipfs cat $1 > read_file35
 0 1 head -c 10000000 < /dev/urandom > test_file36
 0 1 ipfs add test_file36
-2 1 ipfs cat $1 > read_file36
 1 1 ipfs cat $1 > read_file36
-3 1 ipfs cat $1 > read_file36
 0 1 head -c 10000000 < /dev/urandom > test_file37
 0 1 ipfs add test_file37
 1 1 ipfs cat $1 > read_file37
-2 1 ipfs cat $1 > read_file37
-3 1 ipfs cat $1 > read_file37
 0 1 head -c 10000000 < /dev/urandom > test_file38
 0 1 ipfs add test_file38
-2 1 ipfs cat $1 > read_file38
 1 1 ipfs cat $1 > read_file38
-3 1 ipfs cat $1 > read_file38
 0 1 head -c 10000000 < /dev/urandom > test_file39
 0 1 ipfs add test_file39
 1 1 ipfs cat $1 > read_file39
-2 1 ipfs cat $1 > read_file39
-3 1 ipfs cat $1 > read_file39
 0 1 head -c 10000000 < /dev/urandom > test_file40
 0 1 ipfs add test_file40
-2 1 ipfs cat $1 > read_file40
 1 1 ipfs cat $1 > read_file40
-3 1 ipfs cat $1 > read_file40
 0 1 head -c 10000000 < /dev/urandom > test_file41
 0 1 ipfs add test_file41
 1 1 ipfs cat $1 > read_file41
-2 1 ipfs cat $1 > read_file41
-3 1 ipfs cat $1 > read_file41
 0 1 head -c 10000000 < /dev/urandom > test_file42
 0 1 ipfs add test_file42
-2 1 ipfs cat $1 > read_file42
 1 1 ipfs cat $1 > read_file42
-3 1 ipfs cat $1 > read_file42
 0 1 head -c 10000000 < /dev/urandom > test_file43
 0 1 ipfs add test_file43
 1 1 ipfs cat $1 > read_file43
-2 1 ipfs cat $1 > read_file43
-3 1 ipfs cat $1 > read_file43
 0 1 head -c 10000000 < /dev/urandom > test_file44
 0 1 ipfs add test_file44
-2 1 ipfs cat $1 > read_file44
 1 1 ipfs cat $1 > read_file44
-3 1 ipfs cat $1 > read_file44
 0 1 head -c 10000000 < /dev/urandom > test_file45
 0 1 ipfs add test_file45
 1 1 ipfs cat $1 > read_file45
-2 1 ipfs cat $1 > read_file45
-3 1 ipfs cat $1 > read_file45
 0 1 head -c 10000000 < /dev/urandom > test_file46
 0 1 ipfs add test_file46
-2 1 ipfs cat $1 > read_file46
 1 1 ipfs cat $1 > read_file46
-3 1 ipfs cat $1 > read_file46
 0 1 head -c 10000000 < /dev/urandom > test_file47
 0 1 ipfs add test_file47
 1 1 ipfs cat $1 > read_file47
-2 1 ipfs cat $1 > read_file47
-3 1 ipfs cat $1 > read_file47
 0 1 head -c 10000000 < /dev/urandom > test_file48
 0 1 ipfs add test_file48
-2 1 ipfs cat $1 > read_file48
 1 1 ipfs cat $1 > read_file48
-3 1 ipfs cat $1 > read_file48
 0 1 head -c 10000000 < /dev/urandom > test_file49
 0 1 ipfs add test_file49
 1 1 ipfs cat $1 > read_file49
-2 1 ipfs cat $1 > read_file49
-3 1 ipfs cat $1 > read_file49
 0 1 head -c 10000000 < /dev/urandom > test_file50
 0 1 ipfs add test_file50
-2 1 ipfs cat $1 > read_file50
 1 1 ipfs cat $1 > read_file50
-3 1 ipfs cat $1 > read_file50
 0 1 head -c 10000000 < /dev/urandom > test_file51
 0 1 ipfs add test_file51
 1 1 ipfs cat $1 > read_file51
-2 1 ipfs cat $1 > read_file51
-3 1 ipfs cat $1 > read_file51
 0 1 head -c 10000000 < /dev/urandom > test_file52
 0 1 ipfs add test_file52
-2 1 ipfs cat $1 > read_file52
 1 1 ipfs cat $1 > read_file52
-3 1 ipfs cat $1 > read_file52
 0 1 head -c 10000000 < /dev/urandom > test_file53
 0 1 ipfs add test_file53
 1 1 ipfs cat $1 > read_file53
-2 1 ipfs cat $1 > read_file53
-3 1 ipfs cat $1 > read_file53
 0 1 head -c 10000000 < /dev/urandom > test_file54
 0 1 ipfs add test_file54
-2 1 ipfs cat $1 > read_file54
 1 1 ipfs cat $1 > read_file54
-3 1 ipfs cat $1 > read_file54
 0 1 head -c 10000000 < /dev/urandom > test_file55
 0 1 ipfs add test_file55
 1 1 ipfs cat $1 > read_file55
-2 1 ipfs cat $1 > read_file55
-3 1 ipfs cat $1 > read_file55
 0 1 head -c 10000000 < /dev/urandom > test_file56
 0 1 ipfs add test_file56
-2 1 ipfs cat $1 > read_file56
 1 1 ipfs cat $1 > read_file56
-3 1 ipfs cat $1 > read_file56
 0 1 head -c 10000000 < /dev/urandom > test_file57
 0 1 ipfs add test_file57
 1 1 ipfs cat $1 > read_file57
-2 1 ipfs cat $1 > read_file57
-3 1 ipfs cat $1 > read_file57
 0 1 head -c 10000000 < /dev/urandom > test_file58
 0 1 ipfs add test_file58
-2 1 ipfs cat $1 > read_file58
 1 1 ipfs cat $1 > read_file58
-3 1 ipfs cat $1 > read_file58
 0 1 head -c 10000000 < /dev/urandom > test_file59
 0 1 ipfs add test_file59
 1 1 ipfs cat $1 > read_file59
-2 1 ipfs cat $1 > read_file59
-3 1 ipfs cat $1 > read_file59
 0 1 head -c 10000000 < /dev/urandom > test_file60
 0 1 ipfs add test_file60
-2 1 ipfs cat $1 > read_file60
 1 1 ipfs cat $1 > read_file60
-3 1 ipfs cat $1 > read_file60
 0 1 head -c 10000000 < /dev/urandom > test_file61
 0 1 ipfs add test_file61
 1 1 ipfs cat $1 > read_file61
-2 1 ipfs cat $1 > read_file61
-3 1 ipfs cat $1 > read_file61
 0 1 head -c 10000000 < /dev/urandom > test_file62
 0 1 ipfs add test_file62
-2 1 ipfs cat $1 > read_file62
 1 1 ipfs cat $1 > read_file62
-3 1 ipfs cat $1 > read_file62
 0 1 head -c 10000000 < /dev/urandom > test_file63
 0 1 ipfs add test_file63
 1 1 ipfs cat $1 > read_file63
-2 1 ipfs cat $1 > read_file63
-3 1 ipfs cat $1 > read_file63
 0 1 head -c 10000000 < /dev/urandom > test_file64
 0 1 ipfs add test_file64
-2 1 ipfs cat $1 > read_file64
 1 1 ipfs cat $1 > read_file64
-3 1 ipfs cat $1 > read_file64
 0 1 head -c 10000000 < /dev/urandom > test_file65
 0 1 ipfs add test_file65
 1 1 ipfs cat $1 > read_file65
-2 1 ipfs cat $1 > read_file65
-3 1 ipfs cat $1 > read_file65
 0 1 head -c 10000000 < /dev/urandom > test_file66
 0 1 ipfs add test_file66
-2 1 ipfs cat $1 > read_file66
 1 1 ipfs cat $1 > read_file66
-3 1 ipfs cat $1 > read_file66
 0 1 head -c 10000000 < /dev/urandom > test_file67
 0 1 ipfs add test_file67
 1 1 ipfs cat $1 > read_file67
-2 1 ipfs cat $1 > read_file67
-3 1 ipfs cat $1 > read_file67
 0 1 head -c 10000000 < /dev/urandom > test_file68
 0 1 ipfs add test_file68
-2 1 ipfs cat $1 > read_file68
 1 1 ipfs cat $1 > read_file68
-3 1 ipfs cat $1 > read_file68
 0 1 head -c 10000000 < /dev/urandom > test_file69
 0 1 ipfs add test_file69
 1 1 ipfs cat $1 > read_file69
-2 1 ipfs cat $1 > read_file69
-3 1 ipfs cat $1 > read_file69
 0 1 head -c 10000000 < /dev/urandom > test_file70
 0 1 ipfs add test_file70
-2 1 ipfs cat $1 > read_file70
 1 1 ipfs cat $1 > read_file70
-3 1 ipfs cat $1 > read_file70
 0 1 head -c 10000000 < /dev/urandom > test_file71
 0 1 ipfs add test_file71
 1 1 ipfs cat $1 > read_file71
-2 1 ipfs cat $1 > read_file71
-3 1 ipfs cat $1 > read_file71
 0 1 head -c 10000000 < /dev/urandom > test_file72
 0 1 ipfs add test_file72
-2 1 ipfs cat $1 > read_file72
 1 1 ipfs cat $1 > read_file72
-3 1 ipfs cat $1 > read_file72
 0 1 head -c 10000000 < /dev/urandom > test_file73
 0 1 ipfs add test_file73
 1 1 ipfs cat $1 > read_file73
-2 1 ipfs cat $1 > read_file73
-3 1 ipfs cat $1 > read_file73
 0 1 head -c 10000000 < /dev/urandom > test_file74
 0 1 ipfs add test_file74
-2 1 ipfs cat $1 > read_file74
 1 1 ipfs cat $1 > read_file74
-3 1 ipfs cat $1 > read_file74
 0 1 head -c 10000000 < /dev/urandom > test_file75
 0 1 ipfs add test_file75
 1 1 ipfs cat $1 > read_file75
-2 1 ipfs cat $1 > read_file75
-3 1 ipfs cat $1 > read_file75
 0 1 head -c 10000000 < /dev/urandom > test_file76
 0 1 ipfs add test_file76
-2 1 ipfs cat $1 > read_file76
 1 1 ipfs cat $1 > read_file76
-3 1 ipfs cat $1 > read_file76
 0 1 head -c 10000000 < /dev/urandom > test_file77
 0 1 ipfs add test_file77
 1 1 ipfs cat $1 > read_file77
-2 1 ipfs cat $1 > read_file77
-3 1 ipfs cat $1 > read_file77
 0 1 head -c 10000000 < /dev/urandom > test_file78
 0 1 ipfs add test_file78
-2 1 ipfs cat $1 > read_file78
 1 1 ipfs cat $1 > read_file78
-3 1 ipfs cat $1 > read_file78
 0 1 head -c 10000000 < /dev/urandom > test_file79
 0 1 ipfs add test_file79
 1 1 ipfs cat $1 > read_file79
-2 1 ipfs cat $1 > read_file79
-3 1 ipfs cat $1 > read_file79
 0 1 head -c 10000000 < /dev/urandom > test_file80
 0 1 ipfs add test_file80
-2 1 ipfs cat $1 > read_file80
 1 1 ipfs cat $1 > read_file80
-3 1 ipfs cat $1 > read_file80
 0 1 head -c 10000000 < /dev/urandom > test_file81
 0 1 ipfs add test_file81
 1 1 ipfs cat $1 > read_file81
-2 1 ipfs cat $1 > read_file81
-3 1 ipfs cat $1 > read_file81
 0 1 head -c 10000000 < /dev/urandom > test_file82
 0 1 ipfs add test_file82
-2 1 ipfs cat $1 > read_file82
 1 1 ipfs cat $1 > read_file82
-3 1 ipfs cat $1 > read_file82
 0 1 head -c 10000000 < /dev/urandom > test_file83
 0 1 ipfs add test_file83
 1 1 ipfs cat $1 > read_file83
-2 1 ipfs cat $1 > read_file83
-3 1 ipfs cat $1 > read_file83
 0 1 head -c 10000000 < /dev/urandom > test_file84
 0 1 ipfs add test_file84
-2 1 ipfs cat $1 > read_file84
 1 1 ipfs cat $1 > read_file84
-3 1 ipfs cat $1 > read_file84
 0 1 head -c 10000000 < /dev/urandom > test_file85
 0 1 ipfs add test_file85
 1 1 ipfs cat $1 > read_file85
-2 1 ipfs cat $1 > read_file85
-3 1 ipfs cat $1 > read_file85
 0 1 head -c 10000000 < /dev/urandom > test_file86
 0 1 ipfs add test_file86
-2 1 ipfs cat $1 > read_file86
 1 1 ipfs cat $1 > read_file86
-3 1 ipfs cat $1 > read_file86
 0 1 head -c 10000000 < /dev/urandom > test_file87
 0 1 ipfs add test_file87
 1 1 ipfs cat $1 > read_file87
-2 1 ipfs cat $1 > read_file87
-3 1 ipfs cat $1 > read_file87
 0 1 head -c 10000000 < /dev/urandom > test_file88
 0 1 ipfs add test_file88
-2 1 ipfs cat $1 > read_file88
 1 1 ipfs cat $1 > read_file88
-3 1 ipfs cat $1 > read_file88
 0 1 head -c 10000000 < /dev/urandom > test_file89
 0 1 ipfs add test_file89
 1 1 ipfs cat $1 > read_file89
-2 1 ipfs cat $1 > read_file89
-3 1 ipfs cat $1 > read_file89
 0 1 head -c 10000000 < /dev/urandom > test_file90
 0 1 ipfs add test_file90
-2 1 ipfs cat $1 > read_file90
 1 1 ipfs cat $1 > read_file90
-3 1 ipfs cat $1 > read_file90
 0 1 head -c 10000000 < /dev/urandom > test_file91
 0 1 ipfs add test_file91
 1 1 ipfs cat $1 > read_file91
-2 1 ipfs cat $1 > read_file91
-3 1 ipfs cat $1 > read_file91
 0 1 head -c 10000000 < /dev/urandom > test_file92
 0 1 ipfs add test_file92
-2 1 ipfs cat $1 > read_file92
 1 1 ipfs cat $1 > read_file92
-3 1 ipfs cat $1 > read_file92
 0 1 head -c 10000000 < /dev/urandom > test_file93
 0 1 ipfs add test_file93
 1 1 ipfs cat $1 > read_file93
-2 1 ipfs cat $1 > read_file93
-3 1 ipfs cat $1 > read_file93
 0 1 head -c 10000000 < /dev/urandom > test_file94
 0 1 ipfs add test_file94
-2 1 ipfs cat $1 > read_file94
 1 1 ipfs cat $1 > read_file94
-3 1 ipfs cat $1 > read_file94
 0 1 head -c 10000000 < /dev/urandom > test_file95
 0 1 ipfs add test_file95
 1 1 ipfs cat $1 > read_file95
-2 1 ipfs cat $1 > read_file95
-3 1 ipfs cat $1 > read_file95
 0 1 head -c 10000000 < /dev/urandom > test_file96
 0 1 ipfs add test_file96
-2 1 ipfs cat $1 > read_file96
 1 1 ipfs cat $1 > read_file96
-3 1 ipfs cat $1 > read_file96
 0 1 head -c 10000000 < /dev/urandom > test_file97
 0 1 ipfs add test_file97
 1 1 ipfs cat $1 > read_file97
-2 1 ipfs cat $1 > read_file97
-3 1 ipfs cat $1 > read_file97
 0 1 head -c 10000000 < /dev/urandom > test_file98
 0 1 ipfs add test_file98
-2 1 ipfs cat $1 > read_file98
 1 1 ipfs cat $1 > read_file98
-3 1 ipfs cat $1 > read_file98
 0 1 head -c 10000000 < /dev/urandom > test_file99
 0 1 ipfs add test_file99
 1 1 ipfs cat $1 > read_file99
-2 1 ipfs cat $1 > read_file99
-3 1 ipfs cat $1 > read_file99
 0 1 head -c 10000000 < /dev/urandom > test_file100
 0 1 ipfs add test_file100
-2 1 ipfs cat $1 > read_file100
 1 1 ipfs cat $1 > read_file100
-3 1 ipfs cat $1 > read_file100
 0 1 head -c 10000000 < /dev/urandom > test_file101
 0 1 ipfs add test_file101
 1 1 ipfs cat $1 > read_file101
-2 1 ipfs cat $1 > read_file101
-3 1 ipfs cat $1 > read_file101
 0 1 head -c 10000000 < /dev/urandom > test_file102
 0 1 ipfs add test_file102
-2 1 ipfs cat $1 > read_file102
 1 1 ipfs cat $1 > read_file102
-3 1 ipfs cat $1 > read_file102
 0 1 head -c 10000000 < /dev/urandom > test_file103
 0 1 ipfs add test_file103
 1 1 ipfs cat $1 > read_file103
-2 1 ipfs cat $1 > read_file103
-3 1 ipfs cat $1 > read_file103
 0 1 head -c 10000000 < /dev/urandom > test_file104
 0 1 ipfs add test_file104
-2 1 ipfs cat $1 > read_file104
 1 1 ipfs cat $1 > read_file104
-3 1 ipfs cat $1 > read_file104
 0 1 head -c 10000000 < /dev/urandom > test_file105
 0 1 ipfs add test_file105
 1 1 ipfs cat $1 > read_file105
-2 1 ipfs cat $1 > read_file105
-3 1 ipfs cat $1 > read_file105
 0 1 head -c 10000000 < /dev/urandom > test_file106
 0 1 ipfs add test_file106
-2 1 ipfs cat $1 > read_file106
 1 1 ipfs cat $1 > read_file106
-3 1 ipfs cat $1 > read_file106
 0 1 head -c 10000000 < /dev/urandom > test_file107
 0 1 ipfs add test_file107
 1 1 ipfs cat $1 > read_file107
-2 1 ipfs cat $1 > read_file107
-3 1 ipfs cat $1 > read_file107
 0 1 head -c 10000000 < /dev/urandom > test_file108
 0 1 ipfs add test_file108
-2 1 ipfs cat $1 > read_file108
 1 1 ipfs cat $1 > read_file108
-3 1 ipfs cat $1 > read_file108
 0 1 head -c 10000000 < /dev/urandom > test_file109
 0 1 ipfs add test_file109
 1 1 ipfs cat $1 > read_file109
-2 1 ipfs cat $1 > read_file109
-3 1 ipfs cat $1 > read_file109
 0 1 head -c 10000000 < /dev/urandom > test_file110
 0 1 ipfs add test_file110
-2 1 ipfs cat $1 > read_file110
 1 1 ipfs cat $1 > read_file110
-3 1 ipfs cat $1 > read_file110
 0 1 head -c 10000000 < /dev/urandom > test_file111
 0 1 ipfs add test_file111
 1 1 ipfs cat $1 > read_file111
-2 1 ipfs cat $1 > read_file111
-3 1 ipfs cat $1 > read_file111
 0 1 head -c 10000000 < /dev/urandom > test_file112
 0 1 ipfs add test_file112
-2 1 ipfs cat $1 > read_file112
 1 1 ipfs cat $1 > read_file112
-3 1 ipfs cat $1 > read_file112
 0 1 head -c 10000000 < /dev/urandom > test_file113
 0 1 ipfs add test_file113
 1 1 ipfs cat $1 > read_file113
-2 1 ipfs cat $1 > read_file113
-3 1 ipfs cat $1 > read_file113
 0 1 head -c 10000000 < /dev/urandom > test_file114
 0 1 ipfs add test_file114
-2 1 ipfs cat $1 > read_file114
 1 1 ipfs cat $1 > read_file114
-3 1 ipfs cat $1 > read_file114
 0 1 head -c 10000000 < /dev/urandom > test_file115
 0 1 ipfs add test_file115
 1 1 ipfs cat $1 > read_file115
-2 1 ipfs cat $1 > read_file115
-3 1 ipfs cat $1 > read_file115
 0 1 head -c 10000000 < /dev/urandom > test_file116
 0 1 ipfs add test_file116
-2 1 ipfs cat $1 > read_file116
 1 1 ipfs cat $1 > read_file116
-3 1 ipfs cat $1 > read_file116
 0 1 head -c 10000000 < /dev/urandom > test_file117
 0 1 ipfs add test_file117
 1 1 ipfs cat $1 > read_file117
-2 1 ipfs cat $1 > read_file117
-3 1 ipfs cat $1 > read_file117
 0 1 head -c 10000000 < /dev/urandom > test_file118
 0 1 ipfs add test_file118
-2 1 ipfs cat $1 > read_file118
 1 1 ipfs cat $1 > read_file118
-3 1 ipfs cat $1 > read_file118
 0 1 head -c 10000000 < /dev/urandom > test_file119
 0 1 ipfs add test_file119
 1 1 ipfs cat $1 > read_file119
-2 1 ipfs cat $1 > read_file119
-3 1 ipfs cat $1 > read_file119
 0 1 head -c 10000000 < /dev/urandom > test_file120
 0 1 ipfs add test_file120
-2 1 ipfs cat $1 > read_file120
 1 1 ipfs cat $1 > read_file120
-3 1 ipfs cat $1 > read_file120
