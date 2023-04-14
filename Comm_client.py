@@ -214,7 +214,7 @@ def service_connection(key, mask):
                 # print(recv_data[:7])
                 # print(f"Received command {recv_data} ")
                 if recv_data[0] == hello_ms:
-                    messages_buf = payload_concat(client_info_cc,"please client's info")
+                    messages_buf = paylsload_concat(client_info_cc,"please client's info")
                     data.outb += messages_buf
                 elif recv_data[0] == client_info_ms:
                     print(f"Receive the message: {recv_data[6:6+num1]}")
